@@ -1,0 +1,4 @@
+### Kafka自动安装工具
+> 如果已经安装java环境，需要建立一个软连接  ln -s java_path /usr/local/services/barad_java-1.0
+> 并且将main.yml中的java安装步骤注释掉，也可以不注释，结果会报红但是安装过程不会出问题
+> 安装完成之后，检测了是否已经成功启动kafka进程。并尝试创建一个topic，如果失败会报错

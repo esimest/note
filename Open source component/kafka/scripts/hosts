@@ -1,0 +1,15 @@
+[kafka]
+172.16.14.151
+172.16.14.152
+172.16.14.157
+
+[zk]
+172.16.14.151
+172.16.14.152
+172.16.14.157
+
+[all:vars]
+ansible_port=22
+ansible_ssh_user=root
+ansible_ssh_pass='hycloud@123'
+zk_port=2181

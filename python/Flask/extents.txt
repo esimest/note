@@ -1,0 +1,46 @@
+app.config 可以用来存储框架，扩展，程序本身的配置变量
+还可以通过环境变量进行配置
+使用所有扩展之前都需要初始化该扩展
+
+使用flask_script使Flask应用可以接收命令行参数 
+python app.py shell(打开python解释器)  runserver(运行web服务）--help
+设置启动shell时自动导入Flask实例，sqlalchemy实例以及模型等
+def make_shell_context():
+        return ditc(app=app,db=db,User=User,Role=Role)
+manager.add_command("shell",falske_script.shell(make_context=make_shell_context))
+@manager.command
+
+添加shell命令行的命令，实现数据库迁移
+migrate=Migrate(app,db)
+manager.add_command('db',MigrateCommand)
+
+使用flask_bootstrap继承 Twitter Bootstrap
+使用super()保留及模板中的原始内容
+
+使用flask_moment本地化时间和日期
+需要引入moment.js
+{{ moment.inclued_moment() }}
+
+moment(utctime).format('L~LLL')
+
+使用flask_wtf 处理web表单
+设置SECRET_KEY
+生成加密令牌，防止跨站请求伪造（CSRF)
+wtf.quick_form(form)快速生成表单
+
+用户会话保存在客户端的cookie中
+
+使用flask_sqlalchemy管理关系型数据库
+需要配置
+SQLALCHEMY_DATABASE_URI 和
+SQLALCHEMY_COMMIT_ON_TEARDOWN请求结束后自动提交
+db.session数据库会话。可以保持数据库的一致性
+通过模型类的query方法查询数据库中的值
+要查看query对象的sql语句。直接str(query_obj)就可以获得
+
+
+使用flask_migrate迁移（更新）数据库
+维护数据库迁移之前，先要init迁移仓库（自动创建migrations文件夹）
+
+
+flask-htttpauth 认证用户
