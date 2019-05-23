@@ -46,3 +46,5 @@
 - TDSQL(Tencent Distribute MySQL) 腾讯分布式式金融数据库(Mysql版)
 - ATM(Asynchronous Transfer Mode) 异步传输方式
 - Ethernet 以太网
+- DCOS(Data Center Operating System)：私有云的物理基础架构管理引擎
+- 带外： 服务器(ILO Integrated Ligths-out)
