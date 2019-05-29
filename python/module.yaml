@@ -1,0 +1,34 @@
+Python 协议: 双下划线方法( 实现了这个方法就是实现了这个协议 )
+Python 模块: .py 为后缀名的文件
+Python 包: 包含 __init__.py 文件的文件夹
+
+可调用对象:
+  - 函数
+  - 方法
+  - 类
+  - 实现了 __call__ 协议的对象
+
+__name__: 模块的名字 package.module
+__file__: 模块的文件名（绝对路径）
+obj.__sizeof__(): 对象在内存中占的大小（单位：bit）
+__new__(cls, *args, **kwargs): 创建类的实例/对象
+__init__(self, *args, **kwargs): 初始化对象 
+__call__(self, *args, **kwargs): 类中声明了此方法后，类创建的实例便是一个可调用对象
+__all__ = [***]: 
+  - __all__ 在 __init__.py 中声明: from package import * 导入的为 __all__ 声明的模块/或子包
+  - __all__ 在模块中声明: from module import * 导入的为 __all__ 声明的属性/或模块
+
+dir(obj): 返回对象的属性
+ord(char): 字符对应的整数值
+chr(int): 整数对应的字符
+
+sys.ps1: ">>>"
+sys.ps2: "..."
+
+import:
+  - import a: a 可以是包也可以是模块
+  - import a.b.c:
+    - a 为包名: b必须为包名，c必须为包名/模块名
+    - a 为模块名: b, c就没有什么硬性要求了如(import os.path.join 和 from os.path import join 都是可以的) os 是一个模块
+  - from a.b.c import d: 没有特殊场景
+

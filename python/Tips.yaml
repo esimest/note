@@ -1,0 +1,12 @@
+timeit.timeit:
+  Usage: timeit("fun()")
+  Effect: "计算函数或则操作运行的时间"
+
+dis.dis:
+  Usage: dis("fun()")
+  Effect: "返回函数的字节码"
+
+doctest.testmod:
+  Usage: testmod() # write in main
+  Effect: "测试docstring 中的语句" # 只有在模块开始或函数开始处的 doctest 会被执行
+  API: "https://docs.python.org/3.7/library/doctest.html"

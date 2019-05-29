@@ -1,7 +1,0 @@
-172.16.111.70 root hycloud@123
-172.16.111.71 root hycloud@123
-172.16.111.72 root hycloud@123
-172.16.111.73 root hycloud@123
-172.16.111.74 root hycloud@123
-172.16.111.75 root hycloud@123
-172.16.111.76 root hycloud@123
