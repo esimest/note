@@ -1,26 +1,24 @@
+# Terminology
+
 - CVM(Cloud Virtual Machine) 云主机（腾讯公有云服务）
 - TCE(Tencent Cloud Enterprise) 腾讯专有云平台
 - IDC(Internet Data Center) 因特网数据中心
 - VPC(Virtual Private Cloud) 虚拟私有云（可自定义的网络空间）
 - DCI(Data Center Inter-connect) DCI网络（用于数据中心之间的互联网络）
-- TGW(Tencent GateWay) 一套实现多网统一接入、外网网络请求转发、支持自动负载均衡的系统 **<font color=red>就是一网关</font>**  
-    1. 服务器接入 TGW 可以节约外网 IP 地址，原来每个服务器需要一个外网 IP，现在 30 个服务器只需一个外网 IP，节约了申请外网 IP 的费用。
-    2. 接入 TGW 的业务默认具备电信、移动、联通三网接入能力。
-    3. 接入 TGW 可以实现动态负载均衡、系统监控、容灾切换、告警通知、平滑扩容、安全备份等功能。
-    4. 接入 TGW 系统后去掉了外网 IP，服务器不会接受到直接攻击，而且 TGW 系统本身具有不错的防御能力，这样就提高了服务器的安全性。
+- TGW(Tencent GateWay) 一套实现多网统一接入、外网网络请求转发、支持自动负载均衡的系统
 - BMS(Bare Metal Server) 裸金属服务器：虚拟机外表+物理机心脏
 - SW(Switch) 交换机 用于局域网内不同主机互联（网关只识别MAC地址）
 - GW(GateWay) 网关（网络互联） 用于不同局域网之间互联
 - hypervisor 管理程序
-- TKE(Tencent Kubernetes Engine) 腾讯云容器服务, 基于原生 kubernetes 提供以容器为核心的、高度可扩展的高性能容器管理服务
+- TKE(Tencent Kubernetes Engine) 腾讯云容器服务, 基于原生 kubernetes 的容器管理服务
 - Tunneling 隧道
 - IPSec(IP Security) IP安全协议(是一套协议包而不是某一个协议)
 - LB(Load balancing) 负载均衡
-- PXE(Preboot eXecution Environment) 预启动/执行环境：提供了一种使用网络接口（Network Interface）启动计算机的机制。这种机制让计算机的启动可以不依赖本地数据存储设备（如硬盘）或本地已安装的操作系统
+- PXE(Preboot eXecution Environment) 预启动/执行环境
 - LXC(Linux Container) 一种内核虚拟化技术
 - NTP(NetWork Time Protocol) 网络时间协议
 - ISCSI(Internet Small Computer System Interface)
-- CBS(Cloud Block Storage) 云硬盘 
+- CBS(Cloud Block Storage) 云硬盘
 - CDB(Cloud DataBase) 云数据库
 - CLI(command-line interface) 命令行接口（界面）
 - CI(Continuous Intergration) 持续集成(监控代码提交情况，对每个新的提交进行自动化测试)

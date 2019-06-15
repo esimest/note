@@ -1,5 +1,8 @@
-### 配置
-```
+# ETCD 安装配置笔记
+
+## 配置
+
+```shell
 cat << EOF | tee /etc/etcd
 #[Member]
 ETCD_NAME="etcd01"
@@ -16,7 +19,8 @@ ETCD_INITIAL_CLUSTER_STATE="new"
 
 EOF
 ```
-```
+
+```shell
 cat << EOF | tee /etc/etcd
 #[Member]
 ETCD_NAME="etcd02"
@@ -33,7 +37,8 @@ ETCD_INITIAL_CLUSTER_STATE="new"
 
 EOF
 ```
-```
+
+```shell
 cat << EOF | tee /etc/etcd
 #[Member]
 ETCD_NAME="etcd03"
@@ -51,8 +56,9 @@ ETCD_INITIAL_CLUSTER_STATE="new"
 EOF
 ```
 
-### 启动文件
-```
+## 配置启动文件
+
+```shell
 cat << EOF | tee /usr/lib/systemd/system/etcd.service 
 [Unit]
 Description=Etcd Server
@@ -89,7 +95,8 @@ EOF
 ```
 
 ### 启动etcd
-```
+
+```sehll
 systemctl daemon-reload
 systemctl enable etcd
 systemctl start etcd

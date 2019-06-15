@@ -1,13 +1,17 @@
-- 项目地址
-> https://github.com/cloudflare/cfssl
+# CFSSL 笔记
+
+- [项目地址](https://github.com/cloudflare/cfssl)
+
+- 安装
 
 > mv /usr/local/bin/cfssl_linux-amd64 /usr/local/bin/cfssl
 > mv cfssl_linux-amd64 cfssl
-
 > mv /usr/local/bin/cfssljson_linux-amd64 /usr/local/bin/cfssljson
 > mv cfssljson_linux-amd64 cfssljson
-### CA 请求
-```
+
+## CA 请求
+
+```shell
 cat << EOF | tee ca-csr.json
 {
 "CN": "virtual",
@@ -19,33 +23,38 @@ cat << EOF | tee ca-csr.json
     {
         "C": "CN",
         "L": "Shenzhen",
-        "ST": "Shenzhen"         
+        "ST": "Shenzhen"
     }    ]
 }
 EOF
 ```
+
 ### 术语介绍
-> CN: Common Name，浏览器使用该字段验证网站是否合法，一般写的是域名。非常重要。浏览器使用该字段验证网站是否合法
 
-> C: Country， 国家
+- CN: Common Name，浏览器使用该字段验证网站是否合法，一般写的是域名。非常重要。浏览器使用该字段验证网站是否合法
 
-> L: Locality，地区，城市
+- C: Country， 国家
 
-> O: Organization Name，组织名称，公司名称
+- L: Locality，地区，城市
 
-> OU: Organization Unit Name，组织单位名称，公司部门
+- O: Organization Name，组织名称，公司名称
 
-> ST: State，州，省
+- OU: Organization Unit Name，组织单位名称，公司部门
+
+- ST: State，州，省
 
 - 生成 CA 证书和 CA 私钥和 CSR (证书签名请求):
-> ` cfssl gencert -initca ca-csr.json | cfssljson -bare ca  ## 初始化 ca `
-> ` ls ca* `
-> ca.csr  ca-csr.json  ca-key.pem  ca.pem
 
-> 该命令会生成运行 CA 所必需的文件 ca-key.pem（私钥）和 ca.pem（证书），还会生成 ca.csr（证书签名请求），用于交叉签名或重新签名。
+```shell
+# 该命令会生成运行 CA 所必需的文件 ca-key.pem（私钥）和 ca.pem（证书），还会生成 ca.csr（证书签名请求），用于交叉签名或重新签名。
+cfssl gencert -initca ca-csr.json | cfssljson -bare ca  ## 初始化 ca
+ls ca*
+ca.csr  ca-csr.json  ca-key.pem  ca.pem
+```
+
 ### CA 证书生成策略
 
-```
+```shell
 cat << EOF | tee ca-config.json
 {
   "signing": {
@@ -85,27 +94,32 @@ cat << EOF | tee ca-config.json
 }
 EOF
 ```
-> 这个策略，有一个默认的配置，和一个 profiles，可以设置多个 profile，
-> 默认策略，指定了证书的有效期是一年 (8760h)
 
+- 这个策略，有一个默认的配置，和一个 profiles，可以设置多个 profile，
+
+> 默认策略，指定了证书的有效期是一年 (8760h)
 > etcd 策略，指定了证书的用途
 
-> signing, 表示该证书可用于签名其它证书；生成的 ca.pem 证书中 CA=TRUE
+- signing, 表示该证书可用于签名其它证书；生成的 ca.pem 证书中 CA=TRUE
 
 > server auth：表示 client 可以用该 CA 对 server 提供的证书进行验证
-
 > client auth：表示 server 可以用该 CA 对 client 提供的证书进行验证
+
 ### 常用命令
-> cfssl gencert -initca ca-csr.json | cfssljson -bare ca ## 初始化 ca
 
-> cfssl gencert -initca -ca-key key.pem ca-csr.json | cfssljson -bare ca ## 使用现有私钥，重新生成
+```shell
+cfssl gencert -initca ca-csr.json | cfssljson -bare ca # 初始化 ca
 
-> cfssl certinfo -cert ca.pem
+cfssl gencert -initca -ca-key key.pem ca-csr.json | cfssljson -bare ca # 使用现有私钥，重新生成
 
-> cfssl certinfo -csr ca.csr
+cfssl certinfo -cert ca.pem
+
+cfssl certinfo -csr ca.csr
+```
 
 ### etcd 证书请求
-```
+
+```shell
 cat << EOF | tee etcd-csr.json
 {
     "CN": "etcd",
@@ -132,7 +146,8 @@ EOF
 ```
 
 ### kube-apiserver 证书请求
-```
+
+```shell
 cat << EOF | tee kube-apiserver-csr.json
 {
     "CN": "kubernetes",
@@ -164,7 +179,8 @@ EOF
 ```
 
 ### kube-proxy 证书请求
-```
+
+```shell
 cat << EOF | tee kube-proxy-csr.json
 {
   "CN": "system:kube-proxy",
@@ -187,12 +203,15 @@ EOF
 ```
 
 - 生成ca证书
+
 > cfssl gencert -initca ca-csr.json | cfssljson -bare ca -
 
 - 生成服务证书
   1. kube-apiserver
-  > cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kube-apiserver-csr.json | cfssljson -bare kube-apiserver
+  `cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kube-apiserver-csr.json | cfssljson -bare kube-apiserver`
+
   2. kube-proxy
-  > cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kube-proxy-csr.json | cfssljson -bare kube-proxy
-  2. etcd
-  > cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=etcd etcd-csr.json | cfssljson -bare etcd
+  `cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kube-proxy-csr.json | cfssljson -bare kube-proxy`
+
+  3. etcd
+  `cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=etcd etcd-csr.json | cfssljson -bare etcd`
