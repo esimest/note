@@ -24,7 +24,7 @@
 分割线二
 ***
 
-![图片在这里](image.jpg)  
+![图片在这里](image.jpg)
 - 列表元素1
 * 列表元素2
 + 列表元素3
@@ -52,9 +52,9 @@
 关羽|打|二哥
 张飞|骂|三弟
 
-`def code(): return`
+`print('hello')`
 
-```
+```python
 def fun():
-    return 
+    return
 ```
