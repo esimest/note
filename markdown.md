@@ -55,7 +55,7 @@
 关羽|打|二哥
 张飞|骂|三弟
 
-`def code(): return`
+`print('hello')`
 
 ```python
 def fun():
