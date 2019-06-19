@@ -38,7 +38,7 @@ rpm -ivh https://centos7.iuscommunity.org/ius-release.rpm
 yum install -y git2u
 ```
 
-#### K8S安装
+## Kubernetes 安装
 
 - 同步时间
   1. yum install -y nptdate

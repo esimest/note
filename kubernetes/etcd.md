@@ -59,7 +59,7 @@ EOF
 ## 配置启动文件
 
 ```shell
-cat << EOF | tee /usr/lib/systemd/system/etcd.service 
+cat << EOF | tee /usr/lib/systemd/system/etcd.service
 [Unit]
 Description=Etcd Server
 After=network.target
