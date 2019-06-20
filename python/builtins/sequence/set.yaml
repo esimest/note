@@ -1,0 +1,28 @@
+# set: 由具有唯一性的 hashable 对象组成的无序多项集
+# 集合不支持索引，以及索引相关的操作
+# 构造方法 a = set('jack', 'sjoerd')  a = {'jack', 'sjoerd'}
+
+# set: 可变集合
+# frozenset: 不可变集合
+
+- 通用集合操作:
+  - len(s) : 集合长度
+  - x in s  x not in s: 元素检测
+  - s.isdisjoint(other): 两个集合是否有交集
+  - s.issuset(other) : s 是否是 other 的子集
+  - s.issupperset(other): s 是否是 other 的超集
+  - s.union(*other): 返回所有集合的并集
+  - s.intersection(*others): 返回所有集合的交集
+  - s.difference(*others): 返回 s 对 others  的差集
+  - s.symmetric_difference(other): 返回 并集 对 交集 的 差集
+  - s.copy() : 浅拷贝
+
+- 可变集合特有操作:
+  - s.update(*other) : s = s.union(*others)
+  - s.intersection_update(*others): s = s.intersection(*others)
+  - s.difference_update(*others): s = s.difference(*others)
+  - s.add(x): 添加元素
+  - s.remove(x): 如果存在 x 则删除，不存在引发 KeyError
+  - s.discard(elem): 如果存在 x 则删除
+  - s.pop(): 任意返回一个元素, 空集引发 KeyError
+  - s.clear(): 清空集合
