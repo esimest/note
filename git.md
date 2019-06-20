@@ -18,7 +18,7 @@
 
 ```shell
 # 克隆远程仓库
-git clone repo_url [local_name]
+git clone repo_url [local_name] [-o repo_name]
 
 # 添加远程仓库(前提：执行了 git init)
 git remote add [repo_name] remote_url
@@ -143,13 +143,13 @@ git log S'关键字'
 
 ## 分支 (branch)
 
-> 每次将文件添加至暂存区时，都会生成快照，正常情况下会永久存在于 .git/objects 目录下
-> .git/objects 保存着文件的快照，快照名为文件的 hash 值
+> 每次将文件添加至暂存区时，都会生成快照，正常情况下会永久存在于 .git/objects 目录下。
+> .git/objects 保存着文件的快照，快照名为文件的 hash 值。
 > 提交修改时，git 会生成一个树对象，保存着快照文件的指针。然后生成一个 提交对象，指向对应的树对象。
-> 一个提交对象就是一个分支，HEAD 文件保存的是当前所在分支的提交对象。
-> master 是默认创建的分支的别名。
-> git 分支实质上是执行提交对象的指针
-> HEAD 是当前分支的别名
+> 分支是指向提交对象的指针，HEAD 文件保存的是当前所在的分支。
+> master 是默认创建的分支。
+> HEAD 是当前分支的别名。
+> 提交时，对应的分支会重新指向提交后的提交对象，其它分支不变。
 
 ```shell
 # 列出当前所有分支
@@ -167,9 +167,12 @@ git branch -d branch_name
 # 迁出仓库重中文件，覆盖工作目录中的文件，使其状态为未修改状态
 git checkout file_name
 
+***********切换分支前，需要确保当前分支上所做的修改都提交了*************
+
 # 切换至branch_name 分支
 git checkout  branch_name
 
+# 新建分支 branch_name 并切换至该分支
 git checkout -b branch_name
 
 # 切换至 tag_name 版本
