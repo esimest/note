@@ -3,13 +3,13 @@
 - 用法
 
   ```shell
-  find [-H] [-L] [-P] [-D debugopts] [-Olevel] [starting-point...] [expression]    
+  find [-H] [-L] [-P] [-D debugopts] [-Olevel] [starting-point...] [expression]
   starting-point 没指定时为当前目录
   expression
   ```
 
-- 大写参数(写在要查找的路径前面) 
-   > man说明中的command-line 参数实指 starting-point  
+- 大写参数(写在要查找的路径前面)
+   > man说明中的command-line 参数实指 starting-point
    > 如果同时指定了PLH三个参数，出现在命令行最后一个的生效
    1. -P 不查找链接文件所指向的文件或目录(默认参数)
    2. -L 查找链接文件所指向的目录，并以该链接文件为base目录

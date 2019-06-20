@@ -1,3 +1,5 @@
+# Linux 正则
+
 - posix charactes(只能出现在[]中)
   - [:alnum:] == [a-zA-Z0-9] :alphabet or num
   - [:alpha:] == [a-zA-Z] :alphabet
