@@ -74,7 +74,7 @@ git add [file, path]
 # 取消暂存
 git reset HEAD file
 
-# 撤销对文件的改动(前提是未暂存)
+# 撤销对文件的改动(前提是已暂存)
 git checkout -- file
 
 # 提交以暂存的修改至本地仓库
@@ -143,40 +143,45 @@ git log S'关键字'
 
 ## 分支 (branch)
 
+> 每次将文件添加至暂存区时，都会生成快照，正常情况下会永久存在于 .git/objects 目录下
+> .git/objects 保存着文件的快照，快照名为文件的 hash 值
+> 提交修改时，git 会生成一个树对象，保存着快照文件的指针。然后生成一个 提交对象，指向对应的树对象。
+> 一个提交对象就是一个分支，HEAD 文件保存的是当前所在分支的提交对象。
+> master 是默认创建的分支的别名。
 > git 分支实质上是执行提交对象的指针
 > HEAD 是当前分支的别名
 
 ```shell
+# 列出当前所有分支
+git branch
+
+# 列出分支并显示最后一次提交对象的信息
+git branch -v
+
+# 新建分支
+git branch branch_name
+
+# 删除分支 branch_name, -F 强制删除
+git branch -d branch_name
+
+# 迁出仓库重中文件，覆盖工作目录中的文件，使其状态为未修改状态
 git checkout file_name
 
 # 切换至branch_name 分支
 git checkout  branch_name
 
+git checkout -b branch_name
+
 # 切换至 tag_name 版本
 git checkout tag_name
 
-git checkout -b branch_name
-git branch branch_name
-git checkout branch_name
-
-# 列出当前所有分支
-git branch
-
-# 新建分支
-git branch branch_name
-
-# 列出分支并显示最后一次提交对象的信息
-git branch -v
+###### 分支整合------分支整合有两种方式  merge 和 rebase(变基)
+1.  变基 git rebase branch_name 将当前分支上的修改添加至branch_name分支
+2.  使得当前分支成为branch_name分支的下游
 
 # 将当前分支与branch_name分支合并
 git merge branch_name
 
-# 删除分支 branch_name, -F 强制删除
-git branch -d branch_name
-
-###### 分支整合------分支整合有两种方式  merge 和rebase(变基)
-1.  变基 git rebase  branch_name 将当前分支上的修改添加至branch_name分支
-2.  使得当前分支成为branch_name分支的下游
 ```
 
 ## 标签 (tag)
