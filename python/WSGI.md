@@ -6,8 +6,9 @@
 > 应用实现了 wsgi 协议，则可以与所有实现了 wsgi 接口的服务器交互
 > 实现一个 wsgi 中间件（同时实现两侧接口），则可以连接所有遵循 wsgi 的服务器和应用
 
+## 应用侧
+
 ```python
-# 应用侧
 HELLO_WORLD = b'Hello World !\n'
 
 # 函数实现
@@ -37,8 +38,9 @@ class AppClass:
         yield HELLO_WORLD
 ```
 
+## 服务侧
+
 ```python
-# 服务侧
 import os, sys
 
 enc, esc = sys.getfilesystemencoding(), 'surrogateescape'
@@ -106,4 +108,3 @@ def run_with_cgi(application):
             result.close()
 
 ```
-
