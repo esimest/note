@@ -31,7 +31,7 @@ function push_images(){
     tag=$(echo ${file} | cut -d. -f1)
     img_info=$(docker images | grep ${tag})
     img_info=${img_info//\\t/ /}
-    # docker push "${img_info}| cut -f1":"${img_info}| cut -f1"
+
     img_name=$(echo ${img_info}| cut -d' ' -f1)":"$(echo ${img_info}| cut -d' ' -f2)
     docker push ${img_name}  > /dev/null 2>&1
     if [ ! -z $? ]; then
