@@ -54,7 +54,7 @@
     "files.trimTrailingWhitespace": true,
     "workbench.activityBar.visible": false,
     "workbench.statusBar.feedback.visible": false,
-    "editor.wordWrap": "on",
+    "editor.wordWrap": "on", // 切换自动换行 Alt + Z
     "workbench.statusBar.visible": true,
     "C_Cpp.updateChannel": "Insiders",
     "editor.fontSize": 16,

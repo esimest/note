@@ -41,7 +41,8 @@ grep -i 'express' files
 
 # 同时搜索多个表达式
 grep -e 'exp1' -e 'exp2' files
-grep 'exp1\|exp2' files
+grep -E 'exp1|exp2' files
+egrep 'exp1|exp2' files
 
 # 搜索文件中的所有表达式（一行为一个表达式）
 grep -f patterns_fiel files

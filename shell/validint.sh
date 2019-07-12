@@ -13,7 +13,7 @@ function validint(){
     fi
 
     # 判断第一个字符是否为减号
-    if [ "${number%${number#?}}" -eq "-" ]; then
+    if [ "${number%${number#?}}" = "-" ]; then
         testvalue="${number#?}"  # 获取除第一个字符以外的所有字符进行验证。
     else
         testvalue="$number"
@@ -35,18 +35,18 @@ function validint(){
             return 1
         fi
     fi
-    
+
     if [ ! -z $max ]; then
         # 判断输入额数字是否大于指定的最大值
         if [ $number -gt $maxx ]; then
             echo "Your value is too big: biggest acceptable value is $max." >&2
             return 1
         fi
-    fi 
+    fi
 
     return 0
 }
 
-if validint "$1" "$2" "$3" ; then
+if [ ! -z $(validint "$1" "$2" "$3") ] ; then
     echo "Input is a valid ineger within your constraints."
 fi

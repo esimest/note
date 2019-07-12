@@ -1,5 +1,5 @@
 #!/bin/bash
-# inpath -- 验证制定程序是否有效，或者能否在PATH目录列表中找到。
+# inpath -- 验证指定程序是否有效，或者能否在PATH目录列表中找到。
 
 
 function in_path(){
@@ -51,4 +51,4 @@ exit 0
 
 # ${var:n:m} 获取var参数的n-m个字符 或
 # ${var%${var#?}} %: 去除结尾   #: 去除开头   或
-# $(echo $var | cut -c1) 
+# $(echo $var | cut -c1)
