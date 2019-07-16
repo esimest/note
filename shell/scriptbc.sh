@@ -19,9 +19,9 @@ fi
 # $@: 所有参数组成的一个字符串列表，列表中的的元素与参数一一对应
 
 bc -q -l << EOF
-  scale=$precision
-  $*
-  quit
+scale=$precision
+$*
+quit
 EOF
 
 exit 0

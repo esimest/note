@@ -28,7 +28,7 @@ mysql --print-defaults
 # 打印配置文件中指定域中的内容
 my_print_defaults client
 
-# 显示指定不输入密码
+# 显式指定不输入密码
 mysql --skip-password
 
 # 显示表结构
@@ -36,8 +36,26 @@ show FULL COLUMNS from ${table_name};
 DESC ${table_name};
 DESCRIBE ${table_name};
 
-# 命令行直接执行 SQL 语句
+# linux 命令行直接执行 SQL 语句
 mysql -e "${statement1};${statement2}"
-```
 
-15 页
+# linux 命令行执行 SQL 文件
+mysql < ${file}
+cat ${file} | mysql
+
+# mysql 命令行执行 SQL 文件
+mysql> source ${file}; #或
+mysql> \. ${file};
+
+# 输出结果不包含字段名
+mysql --skip-column-names
+mysql -ss
+
+# 使用用户变量保存 SQL 执行的结果
+mysql> SELECT @var := ${column} FROM ${table}
+
+# 直接设置变量
+mysql> SET @var = ${value}
+mysql> SET @var = ${SQL}
+!! 变量只能出现在允许表达式的语句中。需要常量和文本标识符的场景使用变量无法起作用。如建表语句中使用变量来代替表名就会报错。
+```
