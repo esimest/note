@@ -52,4 +52,22 @@ Ctrl + a + [
 
 # 退出复制模式
 Ctrl + a + ]
+
+# 解除链接.unlink 不会发出错误消息，所以需要人工校验是否执行成功
+unlink link_name
+# 使用 link 做链接时尽量不要用 .
+
+# 删除空目录
+rm -d empty_dir
+rmdir empty_dir
+
+# 删除多级空目录,rmdir 只能删除空目录
+rmdir -p a/b/c
+
+# rm  touch cp 命令结束选项使用 --
+# 删除 -foo 文件
+rm '-foo' /rm -foo 都会失败
+rm -- -foo 或 rm ./-foo
+
+# rm 和 cp  的 -r -R --recursive 作用一样
 ```
