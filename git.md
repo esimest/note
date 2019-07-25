@@ -235,3 +235,10 @@ git config --global alias.st status
 git config --global alias.unstage 'rest HEAD --'
 git config --global alias.last 'log -1 HEAD'
 ```
+
+## 问题
+
+```shell
+# remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
+git commit --amend -CHEAD
+```
