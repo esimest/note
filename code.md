@@ -53,3 +53,7 @@
 ```shell
 pip install ipython, autopep8, pep8, pytest, rope
 ```
+
+## 配置 vscode 为 git 编辑器
+
+`git config --global core.editor "code --wait"`
