@@ -1,0 +1,62 @@
+# hello = "Hello World, this is PyPy ! cc_esime"
+
+- 转换大小写 :
+  - capitalize() : "第一个字母大写"
+  - title() : "所有单词首字母大写"
+  - casefold() : 消除大写
+  - lower() : 转换小写
+  - uppre() : 转换大写
+  - swapcase() : 转换大小写
+
+- 填充对齐 :
+  - center(width[, fillchar]) : 使用 fillchar 填充为 width 长，并居中
+  - ljust(width[, fillchar]) : 左对齐
+  - rjust(width[, fillchar]) : 右对齐
+  - zfill(width) : 如果字符串长度小于 width 使用 0 在左边填充字符串，如果字符串以正负号(+ -)开始,则 0 填充在符号的右边剩余字串的左边
+
+- 子串位置与次数计算 :
+  - count(sub[, start[, end]]) : 计算 sub 从 start 到 end 中出现的次数， 建议不要用负数
+  - find(sub[, start[, end]]) : 
+      "返回 start 到 end 字串中 sub 第一次出现的位置，没有找到返回 -1。返回的位置是相对与源字符串来说的"
+  - index(sub[, start[, end]]) :  找不到时引发 ValueError 异常
+  - rfind(sub[, start[, end]]) : 返回最后一次出现的位置
+  - rindex(sub[, start[, end]]) :  找不到时引发 ValueError 异常
+
+- 格式化 : 
+  - format(*args, **kwargs) : 格式化字符串
+  - format_map(mapping) : format(**mapping), mapping 为映射类型的对象
+  
+- 拼接与分割 : 
+  - join(iterable) : 使用字符串拼接iterable中的字符串
+  - partition(sep) : sep第一次出现时，使用 sep 将字符串拆分，(lef, sep, right)
+  - rpartition(sep) : sep最后一次出现时，使用 sep 将字符串拆分，(lef, sep, right)
+  - split(sep=None, maxsplit=-1) : 使用 sep 拆分字符串 maxsplit 次，返回拆分后的字符串构成的列表，默认不限制拆分次数
+  - rsplit(sep=None, maxsplit=-1) : 使用 sep 从右往左 拆分字符串 maxsplit 次，返回拆分后的字符串构成的列表，默认不限制拆分次数
+  - splitlines([keepends]) : 使用 '\n' 拆分字符串，返回拆分后的字符串构成的列表，默认不包含'\n',keepends=True时包含
+
+- 字符串替换 : 
+  - replace(old, new[, count]) : 将字符串中前 count 个 old 字串 替换成 new ，默认替换所有
+  - expandtabs(tabsize=8) : 将 \t 转换为 tabsize 个空格
+  - lstrip([chars]) : 移除字串左边的包含 chars 的最长字符串，默认为空格字符(' ' \t \n ...)
+  - strip([chars]) : 移除字串左右两边边的包含 chars 的最长字符串，默认为空格字符(' ' \t \n ...)
+  - rstrip([chars]) : 移除字串右边边的包含 chars 的最长字符串，默认为空格字符(' ' \t \n ...)
+
+- encode(encoding="utf-8", errors="strict") : 返回b'xxx' 形式
+
+- endswith(suffix[, start[, end]]) : 判断字串在 start 到 end 范围内 是否以 suffix 结尾
+- startswith(suffix[, start[, end]]): 是否以 suffix 开头
+- isalnum() : 判断字符串是否全为 数字或字母
+- isalpha() : 判断是否全为字母
+- isascii() : 是否全为 ascii 字符,范围： U+0000-U+007F
+- isdecimal() : 是否全为十进制整数
+- isdigit() : 是否全为数字字符
+- isidentifier() : 判断字符串是不是 标识符或关键字
+- islower() : 字符串中的字母是否全为小写字符
+- isnumeric() : 字符串是否为数字
+- isprintable() : 是否全为可打印字符
+- isspace() : 是否全为空白字符
+- istitle(): 是否所有单词的第一个字母是否为大写(字母前可以有数字)
+- issupper() : 字符串中的字母是否全为大写
+
+- str.maketrans(x[, y[, z]]) : ' '
+- translate(table) : '  '

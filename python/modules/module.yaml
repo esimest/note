@@ -12,9 +12,9 @@ __name__: 模块的名字 package.module
 __file__: 模块的文件名（绝对路径）
 obj.__sizeof__(): 对象在内存中占的大小（单位：bit）
 __new__(cls, *args, **kwargs): 创建类的实例/对象
-__init__(self, *args, **kwargs): 初始化对象 
+__init__(self, *args, **kwargs): 初始化对象
 __call__(self, *args, **kwargs): 类中声明了此方法后，类创建的实例便是一个可调用对象
-__all__ = [***]: 
+__all__ = [***]:
   - __all__ 在 __init__.py 中声明: from package import * 导入的为 __all__ 声明的模块/或子包
   - __all__ 在模块中声明: from module import * 导入的为 __all__ 声明的属性/或模块
 
@@ -32,3 +32,15 @@ import:
     - a 为模块名: b, c就没有什么硬性要求了如(import os.path.join 和 from os.path import join 都是可以的) os 是一个模块
   - from a.b.c import d: 没有特殊场景
 
+timeit.timeit:
+  Usage: timeit("fun()")
+  Effect: "计算函数或则操作运行的时间"
+
+dis.dis:
+  Usage: dis("fun()")
+  Effect: "返回函数的字节码"
+
+doctest.testmod:
+  Usage: testmod() # write in main
+  Effect: "测试docstring 中的语句" # 只有在模块开始或函数开始处的 doctest 会被执行
+  API: "https://docs.python.org/3.7/library/doctest.html"

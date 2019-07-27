@@ -4,10 +4,12 @@
 
 - 安装
 
-> mv /usr/local/bin/cfssl_linux-amd64 /usr/local/bin/cfssl
-> mv cfssl_linux-amd64 cfssl
-> mv /usr/local/bin/cfssljson_linux-amd64 /usr/local/bin/cfssljson
-> mv cfssljson_linux-amd64 cfssljson
+ ```shell
+ mv /usr/local/bin/cfssl_linux-amd64 /usr/local/bin/cfssl
+ mv cfssl_linux-amd64 cfssl
+ mv /usr/local/bin/cfssljson_linux-amd64 /usr/local/bin/cfssljson
+ mv cfssljson_linux-amd64 cfssljson
+ ```
 
 ## CA 请求
 
@@ -29,7 +31,7 @@ cat << EOF | tee ca-csr.json
 EOF
 ```
 
-### 术语介绍
+## 术语介绍
 
 - CN: Common Name，浏览器使用该字段验证网站是否合法，一般写的是域名。非常重要。浏览器使用该字段验证网站是否合法
 
@@ -52,7 +54,7 @@ ls ca*
 ca.csr  ca-csr.json  ca-key.pem  ca.pem
 ```
 
-### CA 证书生成策略
+## CA 证书生成策略
 
 ```shell
 cat << EOF | tee ca-config.json
@@ -105,7 +107,7 @@ EOF
 > server auth：表示 client 可以用该 CA 对 server 提供的证书进行验证
 > client auth：表示 server 可以用该 CA 对 client 提供的证书进行验证
 
-### 常用命令
+## 常用命令
 
 ```shell
 cfssl gencert -initca ca-csr.json | cfssljson -bare ca # 初始化 ca
@@ -117,7 +119,7 @@ cfssl certinfo -cert ca.pem
 cfssl certinfo -csr ca.csr
 ```
 
-### etcd 证书请求
+## etcd 证书请求
 
 ```shell
 cat << EOF | tee etcd-csr.json

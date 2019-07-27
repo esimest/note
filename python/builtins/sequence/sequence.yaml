@@ -1,0 +1,26 @@
+- 通用序列操作:
+  - x in s: ''
+  - x not in s: ''
+  - s + t : '序列相加'
+  - s*n(n*s) : '序列与整数相乘'
+  - s[i] : '获取元素'
+  - s[i:j] s[i:j:k] : 序列切片
+  - len(s) : 序列长度
+  - min(s) max(s) : 序列最小最大值
+  - s.index(x[, i[, j]]): 序列中元素的位置
+  - s.count(x) : 序列中元素出现的次数
+
+- 可变序列特有操作:
+  - del s[i:j] : 删除序列切片 s[i:j] = []
+  - s[i:j] = t : 将切片替换成另一个序列
+  - s[i:j:k] = t : 内容替换，需要 len(s[i:j:k]) == len(t)
+  - s.appen(x) : 序列追加元素 s += [x]
+  - s.clear() : 清空序列 s = []
+  - s.copy() : 拷贝序列 s[:]
+  - s.extend(t) : s += t
+  - s.insert(i, x) : 插入元素
+  - s.remove(x) : 删除第一个 x 元素
+  - s.reverse() : 逆转元素顺序
+
+- 列表特有操作:
+  - s.sort(): 排序列表
