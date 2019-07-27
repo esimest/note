@@ -240,5 +240,6 @@ git config --global alias.last 'log -1 HEAD'
 
 ```shell
 # remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
-git commit --amend -CHEAD
+# git commit --amend -CHEAD 好像没用
+git filter-branch -f --index-filter "git rm -rf --cached --ignore-unmatch ${file_name}" -- --all
 ```

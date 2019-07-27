@@ -14,9 +14,10 @@
 
 # bool([x]) []代表可有可无
 
-# breakpoint(*args, **kwargs)
-# In builtins.
+
 def breakpoint_builtin(*args, **kwargs):
+    # breakpoint(*args, **kwargs)
+    # In builtins.
     import sys
     missing = object()
     hook = getattr(sys, 'breakpointhook', missing)
@@ -24,9 +25,12 @@ def breakpoint_builtin(*args, **kwargs):
         raise RuntimeError('lost sys.breakpointhook!')
     return hook(*args, **kwargs)
 
-# In sys.
+
 def breakpoint_sys(*args, **kwargs):
-    import importlib, os, warnings
+    # In sys.
+    import importlib
+    import os
+    import warnings
     hookname = os.getenv('PYTHONBREAKPOINT')
     if not hookname:
         hookname = 'pdb.set_trace'
@@ -46,9 +50,11 @@ def breakpoint_sys(*args, **kwargs):
         )
     return hook(*args, **kwargs)
 
+
 def divide(e, f):
     breakpoint(header='进入调试器')
     return e / f
+
 
 a, b = 1, 9
 print(divide(a, b))
@@ -121,7 +127,8 @@ print(divide(a, b))
 
 # map(function, iterable, ...) 可用列表生成式替代
 
-# max(iterable, *[, key, default]) key 为排序方法，当 iterable 为空时返回 default 的值，如果未定义引发 ValueError
+# max(iterable, *[, key, default]) key 为排序方法
+# 当 iterable 为空时返回 default 的值，如果未定义引发 ValueError
 # max(arg1, arg2, *args[, key])
 
 #  memoryview(obj)
@@ -135,7 +142,9 @@ print(divide(a, b))
 
 #  oct(x)
 
-#  open(file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None)
+#  open(file, mode='r', buffering=-1,
+#       encoding=None, errors=None, newline=None,
+#       closefd=True, opener=None)
 
 # ord(c)
 
