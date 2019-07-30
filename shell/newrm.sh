@@ -47,11 +47,11 @@ if [ ! -d $archivedir ] ; then
     echo -e "$redf$0 failedL can't create $archivedir in $HOME$reset" >&2
     exit 1
   fi
-  mkdir $archived
+  mkdir -p $archivedir
   chmod 700 $archivedir    # A little bit of privacy, please
 fi
 
-for arg in $*
+for arg in $* ;
 do
   newname="$archivedir/$(date "+%S.%M.%H.%d.%m").$(basename "$arg")"
   if [ -f "$arg" -o -d "$arg" ] ; then
