@@ -48,6 +48,8 @@ ${master_list}
 [node]
 ${node_list}
 
+[etcd]
+${etcd_list}
 
 [all:vars]
 ansible_ssh_user    = root

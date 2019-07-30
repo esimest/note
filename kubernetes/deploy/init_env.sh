@@ -19,4 +19,6 @@ EOF
 sysctl -p /etc/sysctl.d/kubernetes.conf
 
 # 安装 docker 依赖
-yum install -y yum-utils device-mapper-persistent-data lvm2
+yum install -y wget screen yum-utils device-mapper-persistent-data lvm2
+
+modprobe br_netfilter
