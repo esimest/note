@@ -16,7 +16,7 @@ move="$(which mv | grep '/mv')"
 dest=$(pwd)
 
 if [ ! -d $archivedir ] ; then
-  echo -e "$redf$0: No deleted files directory: nothing to unrm $reset" >&2
+  echo -e "$redf $0: No deleted files directory: nothing to unrm $reset" >&2
   exit 1
 fi
 cd $archivedir
@@ -36,7 +36,7 @@ fi
 matches="$(ls -d *"$1" 2> /dev/null |wc -l)"
 
 if [ $matches -eq 0 ] ; then
-  echo "No match for \"$1\" in the deleted file archivedir." >&2
+  echo "$redf No match for '$1' in the deleted file archivedir. $reset" >&2
   exit 1
 fi
 
@@ -57,8 +57,8 @@ if [ $matches -gt 1 ] ; then
     fi
     index=$(($index + 1))
   done
-
   echo -e "$reset"
+
   echo -n "Which version of $1 should I restore ('0' to quit)? [1] :"
   read desired
   if [ ! -z "$(echo $desired | sed 's/[[:digit:]]//g')" ] ; then
@@ -79,11 +79,11 @@ if [ $matches -gt 1 ] ; then
   restore="$(ls -td1 *"$1" | sed -n "${desired}p")"
 
   if [ -e "$dest/$1" ] ; then
-    echo -e "$redf \"$1\" already exists in this directory. Cannot   overwrite. $reset" >&2
+    echo -e "$redf '$1' already exists in this directory. Cannot   overwrite. $reset" >&2
     exit 1
   fi
 
-  echo -n "Restoring file \"$1\" ..."
+  echo -n "Restoring file '$1' ..."
   $move "$restore" "$dest/$1"
   echo "done."
 
@@ -98,13 +98,13 @@ if [ $matches -gt 1 ] ; then
   fi
 else
   if [ -e "$dest/$1" ] ; then
-    echo -e "$redf \"$1\" already exits in this directory. Cannot overwrite. $reset" >&2
+    echo -e "$redf '$1' already exits in this directory. Cannot overwrite. $reset" >&2
     exit 1
   fi
 
   restore="$(ls -d *"$1")"
 
-  echo -n "Restoring file \"$1\" ..."
+  echo -n "Restoring file '$1' ..."
   $move "$restore" "$dest/$1"
   echo "Done."
 fi

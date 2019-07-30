@@ -22,6 +22,12 @@ grep -n 'express' files
 # 统计表达式出现的次数，不打印出匹配的行
 grep -c 'express' files
 
+# 显示匹配的文件名
+grep -l 'express' files
+
+# 匹配当前目录下所有文件
+grep 'express' *
+
 # 打印匹配行及前n行
 grep -B n 'express' files
 

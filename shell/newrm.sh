@@ -26,7 +26,7 @@ while getopts "dfiPRrvW" opt
 do
   case $opt in
     f ) exec $realrm "$@"      ;;  # exec lets us exit this script directly.
-    * ) flags="$flags-$opt"   ;;  # Other flags are for rm, not us.
+    * ) flags="$flags -$opt"   ;;  # Other flags are for rm, not us. { $flags += "-$opt" }
   esac
 done
 
@@ -44,7 +44,7 @@ initializeANSI
 
 if [ ! -d $archivedir ] ; then
   if [ ! -w $HOME ] ; then
-    echo -e "$redf$0 failedL can't create $archivedir in $HOME$reset" >&2
+    echo -e "$redf $0 failedL can't create $archivedir in $HOME $reset" >&2
     exit 1
   fi
   mkdir -p $archivedir

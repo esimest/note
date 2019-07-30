@@ -1,5 +1,7 @@
 # Linux 正则
 
+## posix
+
 - posix charactes(只能出现在[]中)
   - [:alnum:] == [a-zA-Z0-9] :alphabet or num
   - [:alpha:] == [a-zA-Z] :alphabet
@@ -14,3 +16,10 @@
   - [:space:] : 空白字符
   - [:xdigit:] : 十六进制数
   - [:word:] == [[:alnum:][:]]
+
+## 正则使用
+
+```shell
+# 行首添加空格
+sed 's/^/  /g'
+```
