@@ -3,14 +3,38 @@
 ## 常用 kubectl 命令
 
 ```shell
+# 执行 yaml 文件
+kubectl apply -f ${yaml_file}
+
+# 单个 pod 含有多个 container 时进入容器
+kubectl exec -it ${pod_name} -c ${container_name} bash
+
 # 进入容器
 kubectl exec -it $(kubectl get po -n ${ns} |grep ${img_name} | awk 'NR==1{print $1}') -n ${ns} bash
 
-# load 名字为 img_name.release.tar.gz 的镜像
-docker load -i ig_name.release.tar.gz
+# 删除 pod
+kubectl delete po ${pod_name}
 
-# push 上面 load 的镜像
-docker push $(docker images | grep $(echo "${img_name}" |cut -d '.' -f1) |awk '{print $1":"$2}')
+# 删除 ReplicaSet
+kubectl delete rs ${rs_name}
+```
+
+## 常用别名
+
+```shell
+alias kd='kubectl delete  pod --all-namespaces'
+alias kds='kubectl delete svc --all-namespaces'
+alias kg='kubectl get pod --all-namespaces -o wide |grep '
+alias kgs='kubectl get svc --all-namespaces -o wide |grep '
+
+function ke(){
+  kubectl exec -it $1 --all-namespaces bash;
+}
+alias ke=ke
+alias ka="kubectl get pod --all-namespaces -o wide"
+alias kas="kubectl get svc --all-namespaces -o wide"
+alias kc="kubectl --all-namespaces describe pod"
+alias kl="kubectl logs"
 ```
 
 ## Kubernetes 一些对象的简写(可直接在命令行中使用)

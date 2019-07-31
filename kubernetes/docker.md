@@ -120,3 +120,15 @@ run --ip ip_address img
 >>flanneld将源容器发送的报文封装成UPD报文，由宿主机以目的宿主机IP封装成IP报文
 >>由于目的IP是宿主机IP因此上面封装的IP报文是路由可达的
 >>IP发送到目的宿主机后，由宿主机解析并获取原始数据包，然后通过docker0转发至目的容器
+
+2019.07.31
+
+----
+
+```shell
+# load 名字为 img_name.release.tar.gz 的镜像
+docker load -i ig_name.release.tar.gz
+
+# push 上面 load 的镜像
+docker push $(docker images | grep $(echo "${img_name}" |cut -d '.' -f1) |awk '{print $1":"$2}')
+```

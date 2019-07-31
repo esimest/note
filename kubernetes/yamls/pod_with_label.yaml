@@ -1,0 +1,15 @@
+# 添加了 labels 和 annotaions 的 pod 描述文件
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: webserver
+  annotations:
+    kubernetes.io/change-cause: "Update nginx to 1.7.9"
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.7.9
+    ports:
+    - containerPort: 80
