@@ -244,7 +244,7 @@ cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kube
 
 ```
 
-## 安装 etcd
+## 部署 etcd
 
 ```shell
 # 解压安装 etcd
@@ -445,9 +445,363 @@ ansible all -m shell -a'chmod +x /data/kubernetes/bin/*'
 ansible all -m shell -a'systemctl daemon-reload && systemctl start flanneld && systemctl enable flanneld && systemctl restart docker'
 ```
 
+## 部署 kube-apiserver(master)
+
 ```shell
+# 解压物料包
+tar -xvf kubernetes-server-linux-amd64.tar.gz
+cd kubernetes/server/bin/
+cp kube-scheduler kube-apiserver kube-controller-manager kubectl /data/kubernetes/bin/
 
+# 拷贝证书
+cp /data/cfssl/ca*pem /data/kubernetes/cfssl/
+cp /data/cfssl/kube-apiserver*pem /data/kubernetes/cfssl/
+cp /data/cfssl/kube-proxy*pem /data/kubernetes/cfssl/
 
-# 安装 docker 依赖
-yum install -y yum-utils device-mapper-persistent-data lvm2
+# 创建 TLS Bootstrapping Token
+echo "$(head -c 16 /dev/urandom | od -An -t x | tr -d ' '),kubelet-bootstrap,10001,\"system:kubelet-bootstrap\"" >> /data/kubernetes/conf/token.csv
+
+# 创建 kube-apiserver 配置文件
+vim /data/kubernetes/conf/kube-apiserver
+KUBE_APISERVER_OPTS="--logtostderr=true \
+--v=4 \
+--etcd-servers=https://172.16.111.70:2379,https://172.16.111.71:2379,https://172.16.111.72:2379 \
+--bind-address=172.16.111.70 \
+--secure-port=6443 \
+--advertise-address=172.16.111.70 \
+--allow-privileged=true \
+--service-cluster-ip-range=10.0.0.0/24 \
+--enable-admission-plugins=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota,NodeRestriction \
+--authorization-mode=RBAC,Node \
+--enable-bootstrap-token-auth \
+--token-auth-file=/data/kubernetes/conf/token.csv \
+--service-node-port-range=30000-50000 \
+--tls-cert-file=/data/kubernetes/cfssl/kube-apiserver.pem  \
+--tls-private-key-file=/data/kubernetes/cfssl/kube-apiserver-key.pem \
+--client-ca-file=/data/kubernetes/cfssl/ca.pem \
+--service-account-key-file=/data/kubernetes/cfssl/ca-key.pem \
+--etcd-cafile=/data/etcd/cfssl/ca.pem \
+--etcd-certfile=/data/etcd/cfssl/etcd.pem \
+--etcd-keyfile=/data/etcd/cfssl/etcd-key.pem"
+
+# 创建 kube-apiserver 启动文件
+vim /usr/lib/systemd/system/kube-apiserver.service
+
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+EnvironmentFile=-/data/kubernetes/conf/kube-apiserver
+ExecStart=/data/kubernetes/bin/kube-apiserver $KUBE_APISERVER_OPTS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+# 启动服务
+systemctl daemon-reload
+systemctl enable kube-apiserver
+systemctl restart kube-apiserver
+```
+
+## 部署 kube-schedular(master)
+
+```shell
+# 创建 kube-schedular 配置文件
+vim /data/kubernetes/conf/kube-scheduler
+KUBE_SCHEDULER_OPTS="--logtostderr=true --v=4 --master=127.0.0.1:8080 --leader-elect"
+
+# 创建 kube-schedular 启动文件
+vim /usr/lib/systemd/system/kube-scheduler.service
+[Unit]
+Description=Kubernetes Scheduler
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+EnvironmentFile=-/data/kubernetes/conf/kube-scheduler
+ExecStart=/data/kubernetes/bin/kube-scheduler $KUBE_SCHEDULER_OPTS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+# 启动服务
+systemctl daemon-reload
+systemctl enable kube-scheduler.service
+systemctl restart kube-scheduler.service
+```
+
+## 部署 kube-controller-manager(master)
+
+```shell
+# 创建 kube-controller-manager 配置文件
+vim /data/kubernetes/conf/kube-controller-manager
+KUBE_CONTROLLER_MANAGER_OPTS="--logtostderr=true \
+--v=4 \
+--master=127.0.0.1:8080 \
+--leader-elect=true \
+--address=127.0.0.1 \
+--service-cluster-ip-range=10.0.0.0/24 \
+--cluster-name=kubernetes \
+--cluster-signing-cert-file=/data/kubernetes/cfssl/ca.pem \
+--cluster-signing-key-file=/data/kubernetes/cfssl/ca-key.pem  \
+--root-ca-file=/data/kubernetes/cfssl/ca.pem \
+--service-account-private-key-file=/data/kubernetes/cfssl/ca-key.pem"
+
+# 创建 kube-controller-manager 启动文件
+vim /usr/lib/systemd/system/kube-controller-manager.service
+[Unit]
+Description=Kubernetes Controller Manager
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+EnvironmentFile=-/data/kubernetes/conf/kube-controller-manager
+ExecStart=/data/kubernetes/bin/kube-controller-manager $KUBE_CONTROLLER_MANAGER_OPTS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+# 启动服务
+systemctl daemon-reload
+systemctl enable kube-controller-manager
+systemctl restart kube-controller-manager
+```
+
+## 部署 kubelet(node 节点)
+
+```shell
+# 将 kube-proxy kubelet 分发至 node 节点
+ansible node -m copy -a'src=/data/pkg/kubernetes/node/bin/kube-proxy dest=/data/kubernetes/bin/'
+ansible node -m copy -a'src=/data/pkg/kubernetes/node/bin/kubelet dest=/data/kubernetes/bin/'
+
+# 将 kube-apiserver.pem ca.pem kube-proxy.pem 分发至 node 节点
+ansible node -m copy -a'src=/data/kubernetes/cfssl/kubep-apiserver.pem dest=/data/kubernetes/cfssl/kubep-apiserver.pem'
+ansible node -m copy -a'src=/data/kubernetes/cfssl/ca.pem dest=/data/kubernetes/cfssl/ca.pem'
+ansible node -m copy -a'src=/data/kubernetes/cfssl/kubep-proxy.pem dest=/data/kubernetes/cfssl/kubep-proxy.pem'
+
+# 添加可执行权限
+ansible node -m shell -a'chmod +x /data/kubernetes/bin/*'
+
+# 创建 environment 文件
+cd /data/kubernetes/cfssl/
+vim  environment.sh
+# 创建kubelet bootstrapping kubeconfig
+BOOTSTRAP_TOKEN=65816522d091b9c45cfc674a8c932bef
+KUBE_APISERVER="https://172.16.111.70:6443"
+# 设置集群参数
+kubectl config set-cluster kubernetes \
+  --certificate-authority=./ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=bootstrap.kubeconfig
+
+# 设置客户端认证参数
+kubectl config set-credentials kubelet-bootstrap \
+  --token=${BOOTSTRAP_TOKEN} \
+  --kubeconfig=bootstrap.kubeconfig
+
+# 设置上下文参数
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=kubelet-bootstrap \
+  --kubeconfig=bootstrap.kubeconfig
+
+# 设置默认上下文
+kubectl config use-context default --kubeconfig=bootstrap.kubeconfig
+
+#----------------------
+
+# 创建kube-proxy kubeconfig文件
+
+kubectl config set-cluster kubernetes \
+  --certificate-authority=./ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=kube-proxy.kubeconfig
+
+kubectl config set-credentials kube-proxy \
+  --client-certificate=./kube-proxy.pem \
+  --client-key=./kube-proxy-key.pem \
+  --embed-certs=true \
+  --kubeconfig=kube-proxy.kubeconfig
+
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=kube-proxy \
+  --kubeconfig=kube-proxy.kubeconfig
+
+kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
+
+# 执行 ./environment.sh 生成 bootstrap.kubeconfig kube-proxy.kubeconfig
+# 将 bootstrap.kubeconfig kube-proxy.kubeconfig 分发至所有节点
+ansible all -m copy -a'src=/data/kubernetes/cfssl/bootstrap.kubeconfig dest=/data/kubernetes/conf/'
+ansible all -m copy -a'src=/data/kubernetes/cfssl/kube-proxy.kubeconfig dest=/data/kubernetes/conf/'
+
+# 创建 kubelet 配置模板
+# 172.16.111.71
+tee /data/kubernetes/conf/kubelet.config << EOF
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+address: 172.16.111.71
+port: 10250
+readOnlyPort: 10255
+cgroupDriver: cgroupfs
+clusterDNS: ["10.0.0.2"]
+clusterDomain: cluster.local.
+failSwapOn: false
+authentication:
+  anonymous:
+    enabled: true
+EOF
+
+# 172.16.111.72
+tee /data/kubernetes/conf/kubelet.config << EOF
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+address: 172.16.111.72
+port: 10250
+readOnlyPort: 10255
+cgroupDriver: cgroupfs
+clusterDNS: ["10.0.0.2"]
+clusterDomain: cluster.local.
+failSwapOn: false
+authentication:
+  anonymous:
+    enabled: true
+EOF
+
+# 172.16.111.73
+tee /data/kubernetes/conf/kubelet.config << EOF
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+address: 172.16.111.73
+port: 10250
+readOnlyPort: 10255
+cgroupDriver: cgroupfs
+clusterDNS: ["10.0.0.2"]
+clusterDomain: cluster.local.
+failSwapOn: false
+authentication:
+  anonymous:
+    enabled: true
+EOF
+
+# 创建 kubelet 配置
+# 172.16.111.71
+vim /data/kubernetes/conf/kubelet
+KUBELET_OPTS="--logtostderr=true \
+--v=4 \
+--hostname-override=172.16.111.71 \
+--kubeconfig=/data/kubernetes/conf/kubelet.kubeconfig \
+--bootstrap-kubeconfig=/data/kubernetes/conf/bootstrap.kubeconfig \
+--config=/data/kubernetes/conf/kubelet.config \
+--cert-dir=/data/kubernetes/cfssl \
+--pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0"
+
+# 172.16.111.72
+vim /data/kubernetes/conf/kubelet
+KUBELET_OPTS="--logtostderr=true \
+--v=4 \
+--hostname-override=172.16.111.72 \
+--kubeconfig=/data/kubernetes/conf/kubelet.kubeconfig \
+--bootstrap-kubeconfig=/data/kubernetes/conf/bootstrap.kubeconfig \
+--config=/data/kubernetes/conf/kubelet.config \
+--cert-dir=/data/kubernetes/cfssl \
+--pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0"
+
+# 172.16.111.73
+vim /data/kubernetes/conf/kubelet
+KUBELET_OPTS="--logtostderr=true \
+--v=4 \
+--hostname-override=172.16.111.73 \
+--kubeconfig=/data/kubernetes/conf/kubelet.kubeconfig \
+--bootstrap-kubeconfig=/data/kubernetes/conf/bootstrap.kubeconfig \
+--config=/data/kubernetes/conf/kubelet.config \
+--cert-dir=/data/kubernetes/cfssl \
+--pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0"
+
+# 创建 kubelet 启动文件
+vim /usr/lib/systemd/system/kubelet.service
+[Unit]
+Description=Kubernetes Kubelet
+After=docker.service
+Requires=docker.service
+
+[Service]
+EnvironmentFile=/data/kubernetes/conf/kubelet
+ExecStart=/data/kubernetes/bin/kubelet $KUBELET_OPTS
+Restart=on-failure
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
+
+# 将 kubelet-bootstrap 绑定到系统集群角色
+kubectl create clusterrolebinding kubelet-bootstrap \
+  --clusterrole=system:node-bootstrapper \
+  --user=kubelet-bootstrap
+
+# 将  /data/kubernetes/conf/kubelet.config /data/kubernetes/conf/kubelet  /usr/lib/systemd/system/kubelet.service 分发至 node 节点
+
+ansible node -m copy -a'src=/usr/lib/systemd/system/kubelet.service dest=/usr/lib/systemd/system/kubelet.service'
+
+# 启动 kubelet
+ansible node -m shell -a'systemctl daemon-reload && systemctl enable kubelet && systemctl restart kubelet'
+
+# approve kubelet CSR 请求(执行了之后,kubetctl get nodes 才能获取计算节点)
+# 获取 csr
+kubectl get csr | awk 'NR>1 {print $1}'
+# approve csr
+ kubectl certificate approve $(kubectl get csr | awk 'NR==2 {print $1}')
+```
+
+## 部署 kube-proxy(node 节点)
+
+```shell
+# 创建 kube-proxy 配置文件
+# 172.16.111.71
+vim /data/kubernetes/conf/kube-proxy
+KUBE_PROXY_OPTS="--logtostderr=true \
+--v=4 \
+--hostname-override=172.16.111.71 \
+--cluster-cidr=10.0.0.0/24 \
+--kubeconfig=/data/kubernetes/conf/kube-proxy.kubeconfig"
+
+# 172.16.111.72
+vim /data/kubernetes/conf/kube-proxy
+KUBE_PROXY_OPTS="--logtostderr=true \
+--v=4 \
+--hostname-override=172.16.111.72 \
+--cluster-cidr=10.0.0.0/24 \
+--kubeconfig=/data/kubernetes/conf/kube-proxy.kubeconfig"
+
+# 172.16.111.73
+vim /data/kubernetes/conf/kube-proxy
+KUBE_PROXY_OPTS="--logtostderr=true \
+--v=4 \
+--hostname-override=172.16.111.73 \
+--cluster-cidr=10.0.0.0/24 \
+--kubeconfig=/data/kubernetes/conf/kube-proxy.kubeconfig"
+
+# 创建 kube-proxy 启动文件
+vim /usr/lib/systemd/system/kube-proxy.service
+[Unit]
+Description=Kubernetes Proxy
+After=network.target
+
+[Service]
+EnvironmentFile=-/data/kubernetes/conf/kube-proxy
+ExecStart=/data/kubernetes/bin/kube-proxy $KUBE_PROXY_OPTS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+# 将 /data/kubernetes/conf/kube-proxy /usr/lib/systemd/system/kube-proxy.service 分发至 node 节点
+ansible node -m copy -a'src=/usr/lib/systemd/system/kube-proxy.service dest=/usr/lib/systemd/system/kube-proxy.service'
+
+# 启动服务
+ansible node -m shell -a'systemctl daemon-reload && systemctl enable kube-proxy &&systemctl restart kube-proxy'
 ```

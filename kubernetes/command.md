@@ -1,5 +1,7 @@
 # Kubernetes Docker 命令
 
+## 常用 kubectl 命令
+
 ```shell
 # 进入容器
 kubectl exec -it $(kubectl get po -n ${ns} |grep ${img_name} | awk 'NR==1{print $1}') -n ${ns} bash

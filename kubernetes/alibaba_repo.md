@@ -10,7 +10,7 @@
 - 将镜像推送至阿里仓库
 
 ```shell
-   docker login --username=esimes registry.cn-hangzhou.aliyuncs.com
-   docker tag [ImageId] registry.cn-hangzhou.aliyuncs.com/esime/rep1:[镜像版本号]
-   sudo docker push registry.cn-hangzhou.aliyuncs.com/esime/rep1:[镜像版本号]
+docker login --username=esimes registry.cn-hangzhou.aliyuncs.com
+docker tag [ImageId] registry.cn-hangzhou.aliyuncs.com/esime/rep1:[镜像版本号]
+sudo docker push registry.cn-hangzhou.aliyuncs.com/esime/rep1:[镜像版本号]
 ```
