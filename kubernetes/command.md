@@ -12,11 +12,20 @@ kubectl exec -it ${pod_name} -c ${container_name} bash
 # 进入容器
 kubectl exec -it $(kubectl get po -n ${ns} |grep ${img_name} | awk 'NR==1{print $1}') -n ${ns} bash
 
+# 命令行创建 svc
+kubectl expose deploy ${deploy_name} --port=${dest_port} --target-port=${expose_port}
+
 # 删除 pod
 kubectl delete po ${pod_name}
 
 # 删除 ReplicaSet
 kubectl delete rs ${rs_name}
+
+# node 打标签
+kubectl label nodes ${node_name} ${key}=${value}
+
+# 覆盖 node 上的标签
+kubectl label nodes ${node_name} ${key}=${value} --over-write
 ```
 
 ## 常用别名

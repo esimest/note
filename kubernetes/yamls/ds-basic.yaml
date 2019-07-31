@@ -1,0 +1,25 @@
+# DaemonSet, 保证 pod 在每个指定的 node 上都有副本，且副本数为 1
+# 通过 nodeSelector 指定 node，没有指定时，默认为所有 node
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx
+  labels:
+    app: webserver
+spec:
+  selector:
+    matchLabels:
+      app: webserver
+  template:
+    metadata:
+      labels:
+        app: webserver
+    spec:
+      nodeSelector:
+        needsdaemon: "true"
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
