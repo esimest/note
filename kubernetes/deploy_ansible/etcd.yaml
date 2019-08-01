@@ -1,0 +1,53 @@
+---
+- hosts: etcd
+  tasks:
+    - name: Create necessary directories
+      file: path=/data/etcd/{{ item }} state=directory
+      with_items:
+      - bin
+      - conf
+      - cfssl
+    - name: Unarchive install packages
+      unarchive:
+        src: pkgs/etcd-v3.3.10-linux-amd64.tar.gz
+        dest: /data/etcd/bin
+        mode: 0755
+    - name: Upload etcd config
+      template:
+        src: config/etcd.j2
+        dest: /data/etcd/conf/etcd
+        mode: 0644
+    - name: Upload etcd.service
+      copy:
+        src: config/etcd.service
+        dest: /usr/lib/systemd/system/etcd.service
+        mode: preserve
+    - name: Upload etcd certificaties
+      copy:
+        src: config/{{ item }}
+        dest: /data/etcd/cfssl
+        mode: preserve
+      with_items:
+      - ca.pem
+      - ca-key.pem
+      - etcd.pem
+      - etcd-key.pem
+    - name: Start etcd service
+      systemd:
+        daemon_reload: true
+        name: etcd
+        enabled: true
+        state: started
+    - name: add etcd home into /etc/profile
+      lineinfile: dest=/etc/profile regexp="^ETCD_HOME=" line="ETCD_HOME='/data/etcd/'"
+    - name: export etcd
+      lineinfile : dest=/etc/profile regexp="^export ETCD_HOME" line="export ETCD_HOME/bin"
+    - name: Alias to etcdctl
+      lineinfile:
+        dest: /etc/profile
+        regexp: "^alias etcdctl="
+        line: "alias etcdctl='etcdctl --ca-file=/data/etcd/cfssl/ca.pem --cert-file=/data/etcd/cfssl/etcd.pem --key-file=/data/etcd/cfssl/etcd-key.pem --endpoints=https://172.16.111.70:2379,https://172.16.111.71:2379,https://172.16.111.72:2379'"
+    - name: Make the alias effective
+      shell: source /etc/profile
+    - name: write pod_info into etcd
+      shell: "etcdctl set /coreos.com/network/config '{ 'Network': '172.18.0.0/16', 'Backend': {'Type': 'vxlan'}}"

@@ -1,0 +1,5 @@
+KUBE_PROXY_OPTS="--logtostderr=true \
+--v=4 \
+--hostname-override={{ ansible_default_ipv4['address'] }} \
+--cluster-cidr=10.0.0.0/24 \
+--kubeconfig=/data/kubernetes/conf/kube-proxy.kubeconfig"

@@ -1,0 +1,71 @@
+---
+- hosts: master
+  tasks:
+  - name: Create necessary directories
+    file:
+      path: /data/kubernetes/{{ item }}
+      state: directory
+    with_items:
+    - bin
+    - conf
+    - cfssl
+  - name: Unarchive kubernetes-server-linux-adm64.tar.gz
+    unarchive:
+      src: pkgs/kubernetes-server-linux-adm64.tar.gz
+      dest: /data/kubernetes/bin
+      mode: 0755
+  - name: Copy the certificates
+    copy:
+      src: conf/{{ item }}*pem
+      dest: /data/kubernetes/cfssl
+    with_items:
+    - ca
+    - kube-apiserver
+    - kube-proxy
+  - name: Create TLS Token
+    copy: src=conf/token.csv dest=/data/kubernetes/conf/token.csv
+  - name: Upload kube-apiserver config
+    template:
+      src: conf/kube-apiserver.j2
+      dest: /data/kubernetes/conf/kube-apiserver
+      mode: 0644
+  - name: Upload kube-apiserver.service
+    copy:
+      src: conf/kube-apiserver.service
+      dest: /usr/lib/systemd/system/kube-apiserver.service
+  - name: start kube-apiserver
+    systemd:
+      daemon_reload: true
+      name: kube-apiserver
+      state: startted
+      enabled: true
+  - name: Upload kube-schedular config
+    template:
+      src: conf/kube-schedular.j2
+      dest: /data/kubernetes/conf/kube-schedular
+      mode: 0644
+  - name: Upload kube-schedular.service
+    copy:
+      src: conf/kube-schedular.service
+      dest: /usr/lib/systemd/system/kube-schedular.service
+  - name: start kube-schedular
+    systemd:
+      daemon_reload: true
+      name: kube-schedular
+      state: startted
+      enabled: true
+  - name: Upload kube-controller-manager config
+    template:
+      src: conf/kube-controller-manager.j2
+      dest: /data/kubernetes/conf/kube-controller-manager
+      mode: 0644
+  - name: Upload kube-controller-manager.service
+    copy:
+      src: conf/kube-controller-manager.service
+      dest: /usr/lib/systemd/system/kube-controller-manager.service
+  - name: start kube-controller-manager
+    systemd:
+      daemon_reload: true
+      name: kube-controller-manager
+      state: startted
+      enabled: true

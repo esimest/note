@@ -1,6 +1,7 @@
 # 使用 ansible 部署 kubernetes
 
 > 前置条件：物料准备好(cfssl, etcd, flannel, kubernetes 组件)放在部署节点的 /data/pkg 目录下
+>   配置好证书，生成 token.csv,生成 bootstrap.kubeconfig kube-proxy.kubeconfig
 
 ## 环境初始化，分 master 和 node
 
