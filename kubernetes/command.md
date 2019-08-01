@@ -6,6 +6,9 @@
 # 执行 yaml 文件
 kubectl apply -f ${yaml_file}
 
+# 查看所有资源对象
+kubectl api-resources
+
 # 单个 pod 含有多个 container 时进入容器
 kubectl exec -it ${pod_name} -c ${container_name} bash
 

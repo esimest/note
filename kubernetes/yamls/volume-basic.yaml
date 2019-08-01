@@ -9,14 +9,14 @@ metadata:
   name: nginx
 spec:
   volumes:
-  - name: sharedspace
+  - name: sharedspace  # 将宿主机上的路径与 volume_name 建立映射关系
     hostPath:
       path: "/var/sharedPodDir"
   containers:
   - name: nginx
     image: nginx:1.7.9
     volumeMounts:
-    - mountPath: "/containerMount"
+    - mountPath: "/containerMount" # 将容器内的路径与 volume_name 建立映射关系
       name: "sharedspace"
     ports:
     - containerPort: 80
