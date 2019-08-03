@@ -17,13 +17,13 @@ screen -S esime
 # 列出当前所有 会话
 screen -ls
 
-# 断开会话 esime
+# 离开会话 esime(处在 会话中，执行此命令脱离会话)
 screen -d esime
 
 # 回到 esime 会话
 screen -r esime
 
-# 清楚 dead 的会话
+# 清除 dead 的会话
 screen -wipe
 
 # 显示所有 会话中可用的 screen 命令
@@ -35,8 +35,12 @@ Ctrl + a + c
 # 切换至下（上）一个 window
 Ctrl + a + n(p)
 
-# 退出当前 session，当前执行的任务放至后台执行
+# 脱离当前 session
 Ctrl + a + d
+
+# 结束当前 session
+exit
+Ctrl + d
 
 # 显示当前会话的时间
 Ctrl + a + t
@@ -44,7 +48,7 @@ Ctrl + a + t
 # 杀死当前窗口
 Ctrl + a + k
 
-# 关闭 回话
+# 关闭 esime
 Ctrl + a + quit
 
 # 进入复制模式
