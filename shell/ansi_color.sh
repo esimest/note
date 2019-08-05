@@ -24,3 +24,5 @@ function initializeANSI(){
 
   reset="${esc}[0m"
 }
+
+initializeANSI

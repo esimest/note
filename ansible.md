@@ -20,6 +20,24 @@
 host_key_checking = False
 ```
 
+## inventory
+
+> inventory 常用变量
+> 指定密码可以使用 ansible_password 或 ansible_ssh_pass 但是不能用 ansible_pass
+> 使用 ansible 成功连接到目标主机后， ansible 会将连接信息缓存至 ~/.ansible 目录下(这样，inventory 不指定密码时也可以使用 ansible 连接)
+> 缓存会保存多久暂时还不知道
+
+Name                       | Default         | Description
+:--                        | :---            | :--
+ansible_host               | Name            | of host Hostname or IP address to SSH to
+ansible_port               | 22              | Port to SSH to
+ansible_user               | Root            | User to SSH
+asansible_password         | (None)          | Password to use for SSH authentication
+ansible_connection         | smart           | How Ansible will connect to host (see the following section)
+ansible_private_key_file   | (None)          | SSH private key to use for SSH authentication
+ansible_shell_type         | sh              | Shell to use for commands (see the following section)
+ansible_python_interpreter | /usr/bin/python | Python interpreter on host (see the following section)
+
 ## 关于 ad-hoc
 
 > 建议使用 shell 而不是默认的 command 模块
@@ -48,7 +66,7 @@ content='${str}'  # content 和 src 同时只能出现一个
 ## Handler
 
 > task 的状态为 changed 时才会触发 handler
-> Handlers usually run after all of the tasks are run at the end of the play. They run onlyonce, even if they are notified multiple times.
+> Handlers usually run after all of the tasks are run at the end of the play. They run only once, even if they are notified multiple times.
 
 ### handler 的两个常用的场景
 

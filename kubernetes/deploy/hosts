@@ -43,15 +43,21 @@
 ## db-[99:101]-node.example.com
 
 [master]
-${master_list}
+master1 ${master1_ip}
+master2 ${master2_ip}
+...
 
 [node]
-${node_list}
-
+node1 ${node1_ip}
+node2 ${node2_ip}
+node3 ${node3_ip}
+...
 [etcd]
-${etcd_list}
+etcd1 ${etcd1_ip}
+etcd2 ${etcd2_ip}
+etcd3 ${etcd3_ip}
 
 [all:vars]
-ansible_ssh_user    = root
-ansible_ssh_port    = ${port}
-ansible_ssh_pass    = ${pass}
+ansible_user    = root
+ansible_port    = ${port}
+ansible_pass    = ${pass}

@@ -50,7 +50,7 @@ if [ $matches -gt 1 ] ; then
     if [ -d $name ] ; then
       filecount="$(ls $name | wc -l |sed 's/[^[:digit:]]//g')"
       echo " $index)  $filename (contents = $filecount items," \
-           " deleted = $datetime)"
+            " deleted = $datetime)"
     else
       size="$(ls -sdk1 $name | awk '{print $1}')"
       echo " $index)  $filename (size = ${size}Kb, deleted = $datetime)"
