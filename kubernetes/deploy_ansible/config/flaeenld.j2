@@ -1,1 +1,0 @@
-FLANNEL_OPTIONS="--etcd-endpoints=https://{{ groups['etcd'][0] }}:2379,https://{{ groups['etcd'][1] }}:2379,https://{{ groups['etcd'][2] }}:2379 -etcd-cafile=/data/etcd/cfssl/ca.pem -etcd-certfile=/data/etcd/cfssl/etcd.pem -etcd-keyfile=/data/etcd/cfssl/etcd-key.pem"

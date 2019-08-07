@@ -1,0 +1,12 @@
+#[Member]
+ETCD_NAME= {% for host in groups['kafka'] -%} {% if ansible_all_ipv4_addresses[0] == host %}  {{ "etcd0" + str(loop.index+1) }} {% endif %}{%- endfor %}
+ETCD_DATA_DIR="/var/lib/etcd/default.etcd"
+ETCD_LISTEN_PEER_URLS="https://{{ ansible_default_ipv4['address'] }}:2380"
+ETCD_LISTEN_CLIENT_URLS="https://{{ ansible_default_ipv4['address'] }}:2379"
+
+#[Clustering]
+ETCD_INITIAL_ADVERTISE_PEER_URLS="https://{{ ansible_default_ipv4['address'] }}:2380"
+ETCD_ADVERTISE_CLIENT_URLS="https://{{ ansible_default_ipv4['address'] }}:2379"
+ETCD_INITIAL_CLUSTER="etcd01=https://{{ groups['etcd'][0] }}:2380,etcd02=https://{{ groups['etcd'][1] }}:2380,etcd03=https://{{ groups['etcd'][2] }}:2380"
+ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster"
+ETCD_INITIAL_CLUSTER_STATE="new"

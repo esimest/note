@@ -1,4 +1,82 @@
-# Zookeeper
+# Zookeeper(分布式应用协同服务)
+
+> 分布式数据一致性解决方案
+
+Zookeeper 事务:
+  能够改变 Zookeeper 服务器状态的操作(包括数据的更新、会话的创建与失效)
+  Zookeeper 会为每个事务分配一个事务ID(ZXID), 每个 ZXID 对应一个更新操作。
+  ZXID 是全局的
+
+## 分布式系统
+
+### 概述
+
+> 分布式系统是一个硬件或软件组件分布在不同网络计算机上，彼此之间仅仅通过
+> 消息传递进行通信和协调的系统。
+
+### 特征
+
+- 分布性
+- 对等性
+- 并发性
+- 缺乏全局时钟
+- 故障总是会发生
+
+### 分布式带来的问题
+
+- 通信异常(网络问题)
+- 网络分区(split brain)
+- 三态(成功、失败、超时)
+- 节点故障
+
+## CAP 和 BASE
+
+### CAP理论
+
+> Consitency(一致性)、Availability(可用性)、Partition tolerance(分区容错性) 同时只能满足两个
+
+网络分区:
+  分布式系统中，不同节点分布在不同子网内，当发生网络故障时，导致子网之间无法通信，但是子网内通信
+  正常，从而导致整个网络被划分成多个孤立的子网。
+
+- 一致性
+  > 多副本之间数据保持一致
+
+- 可用性
+  > 有限时间内返回正确结果
+
+- 分区容错性(必须要保证)
+  > 系统在遇到任何网络分区故障时，任然需要对外部保证一致性和可用性，除非是整个网络故障
+
+### BASE(Basic Avaiability、Soft state、Eventually consistency)
+
+- 基本可用
+- 软状态
+- 最终一致性
+  > 系统中的所有数据副本，在经过一段时间后，最终能达到一致性
+
+### 最终一致性的变种
+
+- 因果一致性
+- 读己之所写
+- 会话一致性
+- 单调读一致性
+- 单调写一致性
+
+## Zookeeper 提供的服务
+
+### 数据一致性
+
+- 顺序一致性
+  > 同一客户端发起的事物请求，会严格按照发起顺序被应用到 ZK 中
+- 原子性
+  > 所有事物请求的处理结果在集群中所有节点上的应用情况是一致的，只存在全都应用和全都没用两种情况
+- 单一视图
+  > 无论客户端连接的是集群中的哪个节点，看到的服务端数据模型都是一致的
+- 可靠性
+  > 等同于持久性
+- 实时性
+  > 一段时间内，客户端最终能从服务端读取到数据的最新状态
 
 ## ZAB(Zookeeper Atomic Broadcast: 原子消息广播协议)
 
@@ -21,9 +99,9 @@
    > 每个服务器都会接收来自其它服务器的投票。
 
 3. 处理投票
-   > 检查 ZXID, ZXID 最大的优先选为 Leader
-   > ZXID 相同时，myid 最大的优先选为 Leader
-   > 根据处理比对的结果，失败的服务器更新自己的投票信息，重新发起投票。
+   > **依次检查来自其它节点的所有投票**
+   > 将其它投票与自己的投票进行对比
+   > 如果比较后自己是失败方，则要变更自己的投票，否则坚持自己的投票
 
 4. 统计投票
    > 每次投票后，服务器统计所有投票，判断是否已经有过半的机器接收到相同的投票信息。如果有，则认为 Leader 已经选举出来了
@@ -44,8 +122,6 @@
 5. 统计投票
 6. 改变服务器状态
 
-### 选举算法
-
 #### 发起投票
 
 - SID：用于唯一标识集群中的某一台服务器，与 myid 一致
@@ -57,20 +133,35 @@
 
 - vote_sid：接收到的投票所推举的服务器的 SID
 - vote_zxid：接收到的投票所推举的服务器的 ZXID
-- self_sid：当前服务器的 SID
-- self_zxif：当前服务器的 ZXID
+- self_sid：当前服务器的投票所推举的服务器的 SID
+- self_zxif：当前服务器的投票所推举的服务器的 ZXID
 
 ```python
 # 变更规则
-if vote_zxid > self_zxid:
-  return "认可该投票，并将自己的投票发送出去"
-elif vote_zxid = self_zxid:
-  if vote_sid > self_sid:
-    return  "认可该投票，并将自己的投票发送出去"
-  else:
-    return "坚持自己的投票"
+def count_vote():
+    return '统计所有的投票结果'
+def vote_slefs():
+    return '向其他节点投自己'
+def receive_votes():
+    return '从其它节点接收投票'
+
+vote_self()
+receive_votes()
+count_votes()
+if '有超过半数的投票':
+    return '选出 Leader'
 else:
-  return "坚持自己的投票"
+    for (vote_sid, vote_zxid) in others_vote:
+        if vote_zxid > self_zxid:
+            self_sid, self_zxid = (vote_sid, vote_zxid)
+        elif vote_zxid = self_zxid:
+            if vote_sid > self_sid:
+                self_sid, self_zxid = (vote_sid, vote_zxid)
+            else:
+                pass
+        else:
+            pass
+    return '发起第二轮投票'
 ```
 
 #### 确定 Leader
@@ -107,3 +198,12 @@ else:
 - Write：更新节点数据的权限
 - Delete：删除节点的权限
 - Admin：分配权限的权限
+
+## 会话
+
+> 客户端第一次与服务端建立 TCP 连接时，会话的生命周期就开始了
+> 客户端可以通过心跳检测与服务器保持有效的会话
+
+- SessionTimeout
+  > 用来设置会话超时时间，客户端连接断开后只要在 SessionTimeout
+  > 期间内连接上集群内任一节点，那么之前创建的 session 任然有效

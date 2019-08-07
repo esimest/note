@@ -2,6 +2,7 @@
 # valid-date -- 验证日期（考虑闰年规则）
 
 PATH=.:$PATH
+normdate=".normdate.sh"
 function exceedsDaysInMonth(){
     # 给定月份名称和天数，如果指定的天数小于或等于该月份的最大天数，
     # 函数返回 0； 否则返回 1。
@@ -14,7 +15,7 @@ function exceedsDaysInMonth(){
         sep* ) days=30    ;;    oct* ) days=30    ;;
         nov* ) days=30    ;;    dec* ) days=31    ;;
            * ) echo "$0: Unkonw month anme $1" >&2
-               exit 1
+                exit 1
     esac
 
     if [ $2 -lt 1 -o $2 -gt $days ]; then

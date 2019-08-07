@@ -1,0 +1,22 @@
+all:
+  systemd: /usr/lib/systemd/system/
+  yum_repo: /etc/yums.repo.d/
+  etcd:
+  bin: /data/etcd/bin/
+  conf: /data/etcd/conf/
+  cfssl: /data/etcd/cfssl/
+kubernetes:
+  path:
+    bin: /data/kubernetes/bin/
+    conf: /data/kubernetes/conf/
+    cfssl: /data/kubernetes/cfssl/
+  file:
+
+master:
+  cfssl: /data/cfssl
+  ca_csr: /data/cfssl/ca-csr.json
+  ca_config: /data/cfssl/ca-cofnig.json
+  etcd_csr: /data/cfssl/etcd-csr.json
+  apisvr_csr: /data/cfssl/api-server-csr.json
+  proxy_csr: /data/cfssl/kube-proxy-csr.json
+node:
