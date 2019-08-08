@@ -15,6 +15,9 @@ kubectl exec -it ${pod_name} -c ${container_name} bash
 # 进入容器
 kubectl exec -it $(kubectl get po -n ${ns} |grep ${img_name} | awk 'NR==1{print $1}') -n ${ns} bash
 
+# 批量执行命令
+kubectl get pod | grep ${name} | xargs -n1 -i kubectl exec {} -- ${command}
+
 # 命令行创建 svc
 kubectl expose deploy ${deploy_name} --port=${dest_port} --target-port=${expose_port}
 
