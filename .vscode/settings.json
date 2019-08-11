@@ -1,0 +1,9 @@
+{
+    "python.pythonPath": "C:\\Program Files (x86)\\Python37-32\\python.exe",
+    "python.testing.promptToConfigure": false,
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.linting.pep8Enabled": true,
+    "python.linting.enabled": true
+}

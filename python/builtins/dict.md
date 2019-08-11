@@ -11,6 +11,7 @@
       ... 还有其它的，只要符合 mapping 是可迭代的，其中每项也是可迭代
   - dict(iterable, **kwg): >
       dict({"name": "json", "age": 20, "gender": "male"})
+      ...
   - dict(**kwg):
       dict(name="json", age="20", gender="male")
 - 内置字典操作:
