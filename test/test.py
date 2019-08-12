@@ -1,1 +1,3 @@
-d1 = dict()
+import copy
+
+copy.copy()
