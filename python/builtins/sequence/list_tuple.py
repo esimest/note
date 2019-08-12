@@ -5,6 +5,7 @@ from timeit import timeit
 print(f"timeit('[]'): {timeit('[]')} \
         \ntimeit('list()'): {timeit('list()')}")
 
+
 def list_comp():
     """
         dirrerent between [] and list()
@@ -44,4 +45,3 @@ tuple 和 list 最主要的区别在于：
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
-    

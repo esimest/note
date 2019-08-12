@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """字典相关操作"""
 
 
@@ -19,9 +20,17 @@ def dict_update():
     d['dob'] = '1996-02-17'
     d.pop('dob')
     d.update({'dob': '1996-02-17'})
-    d.pop()
+    d.popitem()
+
+
+def dict_key():
+    d1 = {None: 'None'}
+    d2 = dict(((True, 'True'),))  # 注意：这里的 ',' 不能少
+    d3 = dict({False: 'False'})
+    d4 = {12345: 678910}
 
 
 if __name__ == '__main__':
-    breakpoint()
     dict_update()
+    breakpoint()
+    # dict_key()

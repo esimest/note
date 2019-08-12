@@ -1,11 +1,19 @@
 # dict
 
+## 关于 dict 的键
+
+> 所有可 Hash 的对象都可作为 dict 的键 <==> isinstance(var, collections.abc.Hashable)
+> None、True、False、数字等都可以作为 dict 的键
+
+## dict 基本操作
+
 ```yaml
 # 字典的键由具有唯一的 hashable 对象组成
 # 构造方法 :  class dict(**kwarg)  class dict(mapping, **kwarg)  class dict(iterable, **kwarg)
 - 构造方法:
   - dict(mapping, **kwg): >
-      dict((('name','json'), ('age', 20), ('gender', 'male')))
+      dict((('name', 'json'),))
+      dict((('name', 'json'), ('age', 20), ('gender', 'male')))
       dict([('name', 'json'), ('age', 20), ('gender', 'male')])
       dict(zip(['name', 'age', 'gender'], ['json', 20, 'male']))
       ... 还有其它的，只要符合 mapping 是可迭代的，其中每项也是可迭代
@@ -16,10 +24,10 @@
       dict(name="json", age="20", gender="male")
 - 内置字典操作:
   - len(d) : 字典长度
-  - d[key] : 根据 key 获取 value
+  - d[key] : 根据 key 获取 valuea
   - d[key] = value : 修改 key 对应的 value
   - del d[key] : 删除 key-value 对
-  - key in d key not in d : 键是否在字典中
+  - (key in d) (key not in d) : 键是否在字典中
   - iter(d) : 返回键组成的迭代器
 - 字典方法:
   - d.clear() : 清空字典
