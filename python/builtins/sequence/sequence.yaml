@@ -16,7 +16,7 @@
   - s[i:j:k] = t : 内容替换，需要 len(s[i:j:k]) == len(t)
   - s.appen(x) : 序列追加元素 s += [x]
   - s.clear() : 清空序列 s = []
-  - s.copy() : 拷贝序列 s[:]
+  - s.copy() : 浅拷贝序列 s[:]
   - s.extend(t) : s += t
   - s.insert(i, x) : 插入元素
   - s.remove(x) : 删除第一个 x 元素

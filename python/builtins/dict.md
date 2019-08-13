@@ -3,7 +3,14 @@
 ## 关于 dict 的键
 
 > 所有可 Hash 的对象都可作为 dict 的键 <==> isinstance(var, collections.abc.Hashable)
-> None、True、False、数字等都可以作为 dict 的键
+
+- 特殊的字典 key
+  1. None
+  2. True, False
+  3. 所有类名
+  4. 所有函数名
+  5. 空元组 '()'
+  6. 空字符串 '' ""
 
 ## dict 基本操作
 
