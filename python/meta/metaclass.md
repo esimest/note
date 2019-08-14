@@ -6,6 +6,16 @@
 > 元类的实例是类
 > 对类 A 的调用 A()，用的是 type 的 __call__ 方法
 
+## type
+
+```python
+type(object_or_name, bases, dict)
+param object_or_name
+
+type(object) -> the object's type
+type(name, bases, dict) -> a new type(class object)
+```
+
 ## 创建类
 
 > 创建 Python 类有两种方式(1. 使用 class 定义类，2. 使用 type构造类)
