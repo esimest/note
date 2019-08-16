@@ -139,7 +139,7 @@ git log --grep='关键字'
 git log S'关键字'
 ```
 
-![git log 选项](./images/git_lot.png)
+![git log 选项](../Images/git_log.png)
 
 ## 分支 (branch)
 

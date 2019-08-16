@@ -86,7 +86,8 @@ content='${str}'  # content 和 src 同时只能出现一个
 ## Handler
 
 > task 的状态为 changed 时才会触发 handler
-> Handlers usually run after all of the tasks are run at the end of the play. They run only once even if they are notified multiple times.
+> Handlers usually run after all of the tasks are run at the end of the play.
+> They run only once even if they are notified multiple times.
 
 ### handler 的两个常用的场景
 
