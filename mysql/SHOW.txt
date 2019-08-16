@@ -1,4 +1,0 @@
-SHOW ENGINES; 查看mysql支持的存储引擎
-SHOW ENGINE eng_name STATUS;
-SHOW CREATE TABLE tab_name;查看建表语句
-SHOW VARIABLES LIKE "socket/datadir" 查看一些文件的路径

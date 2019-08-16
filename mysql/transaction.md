@@ -46,34 +46,50 @@
 
 #### GAP
 
-> 当我们用范围条件检索数据而不是相等条件检索数据，并请求共享或排他锁时，InnoDB会给符合范围条件的已有数据记录的索引项加锁；对于键值在条件范围内但并不存在的记录，叫做“间隙（GAP)”。InnoDB也会对这个“间隙”加锁，这种锁机制就是所谓的间隙锁。
+> 当我们用范围条件检索数据而不是相等条件检索数据，并请求共享或排他锁时，
+> InnoDB会给符合范围条件的已有数据记录的索引项加锁；对于键值在条件范围内
+> 但并不存在的记录，叫做“间隙（GAP)”。InnoDB也会对这个“间隙”加锁，这种锁机制就是所谓的间隙锁。
 
 ### serializable;串行化
 
 > 事务按序执行（并发性为 0）
 
-写数据之前先写日志，通过日志来实现redo
-通过数据库内部的segment段(undo段)来实现undo.undo段位于共享表空间
+## 事务相关操作
 
-显示开启事务
+> 写数据之前先写日志，通过日志来实现redo
+> 通过数据库内部的segment段(undo段)来实现undo.undo段位于共享表空间
+
+```shell
+# 显式开启事务
 START TRANSACTION(存储过程中只能使用这种方式开启事务) | BEGIN
-提交事务
+
+# 提交事务
 COMMIT
-回滚事务
+
+# 回滚事务
 ROLLBACK
-创建一个保存点
+
+# 创建一个保存点
 SAVEPOINT name
-删除保存点
+
+# 删除保存点
 RELEASE SAVEPOINT name
-回滚至莫保存点
+
+# 回滚至保存点
 ROLLBACK TO name
-查看事务隔离级别
+
+# 查看事务隔离级别
 SELECT @@TRANSACTION_ISOLATION;
-设置事务的隔离级别
+
+# 设置事务的隔离级别
 SET TRANSACTION_ISOLATION=0~3
 
-设置自动提交
+# 设置自动提交
 SET AUTOCOMMIT = 1
-不自动提交
+
+# 不自动提交
 SET AUTOCOMMIT = 0
+
+# 查询自动提交
 SELECT @@AUTOCOMMIT;
+```
