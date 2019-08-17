@@ -27,6 +27,68 @@
 
 ## 使用 mdadm 做软 raid
 
+```shell
+# 查看分区信息
+ls /dev/ | egrep "sd[^a]" | xargs -n1 -i parted /dev/{} p
+# ls /dev/ | egrep "nvme" | xargs -n1 -i parted /dev/{} p
+
+# 创建磁盘分区表
+ls /dev/ | egrep "sd[^a]" | xargs -n1 -i parted /dev/{} mklabel msdos
+# ls /dev/ | egrep "nvme" | xargs -n1 -i parted /dev/{} mklabel msdos
+
+# 获取磁盘大小
+size_b=$(lsblk /dev/sdb -b| awk 'NR==2{print $4}') && size_m=$(($size_b / 1000000))"."$(($size_b % 1000000))
+# size_b=$(lsblk /dev/nvme0n1 -b| awk 'NR==2{print $4}') && size_m=$(($size_b / 1000000))"."$(($size_b % 1000000))
+
+# 创建磁盘分区
+ls /dev/ | egrep "sd[^a]" | xargs -n1 -i parted /dev/{} mkpart primary 1 ${size_m}
+# ls /dev/ | egrep "nvme" | xargs -n1 -i parted /dev/{} mkpart primary 1 ${size_m}
+
+# 删除磁盘分区
+# ls /dev/ | egrep "sd[^a]$" | xargs -n1 -i parted /dev/{} rm 1
+
+# 创建 raid file system
+#vim fd.sh
+##!/bin/sh
+#
+#fdisk "$1" <<EOF
+#t
+#fd
+#w
+#EOF
+
+# ls /dev/ | egrep "sd[^a]" | xargs -n1 -i bash +x ./fd.sh {}
+
+# 创建 raid5
+cd /dev/ && mdadm -C /dev/md0 -l raid5 -n 11 -x 1 $(ls /dev/ | egrep "sd[^a]1" | xargs)
+# mdadm -C /dev/md0 -l raid5 -n 4 /dev/nvme0n1p1 /dev/nvme1n1p1 /dev/nvme2n1p1 /dev/nvme3n1p1
+# mdadm -C /dev/md0 -l raid5 -n 3 /dev/sdb1 /dev/sdc1 /dev/sdd1
+# cd /dev/ && mdadm -C /dev/md0 -l raid5 -n 3 $(ls /dev/ | egrep "sd[^a]1" | xargs)
+
+# 关闭 raid
+mdadm  --stop /dev/md*
+
+# 清除 raid 信息
+ls /dev/ | egrep "sd[^a]" | xargs -i -n1 mdadm --zero-superblock /dev/{}
+
+# 查看分区 raid 信息
+ls /dev/ | egrep "sd[^a]1" | xargs -n1 -i mdadm --examine /dev/{}
+# ls /dev/ | egrep "nvme.n1p1" | xargs -n1 -i mdadm --examine /dev/{}
+
+# 格式化 raid 盘
+mkfs.ext4 /dev/md0
+
+# 创建挂载点，添加挂载信息
+mkdir /data12 && echo "/dev/md0      /data12/  ext4    defaults        0       0" >> /etc/fstab
+mount -a
+
+# 将 raid 信息写入 /etc/mdadm.conf
+mdadm -E -s -v > /etc/mdadm.conf
+
+# 重启机器
+reboot
+```
+
 1. 检查磁盘/分区是否已经做了 raid
    `mdadm --examine /dev/sd[a-d]`
 
@@ -55,7 +117,7 @@
 n. 挂载后，将配置信息写入  /etc/mdadm.conf
    > 如果不写入 /etc/mdadm.conf，重启操作系统后会出问题
 
-   `mdadm -E -s -v >> /etc/mdadm.conf && mdadm --detail --scan --verbose >> /etc/mdadm.conf`
+`mdadm -E -s -v >> /etc/mdadm.conf && mdadm --detail --scan --verbose >> /etc/mdadm.conf`
 
 ## command
 
