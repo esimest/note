@@ -24,7 +24,7 @@ done
 shift $(($OPTIND - 1))  # 丢弃参数列表中的 $OPTIND - 1 个参数，原来的 $OPTIND 变为现在的 $1
 
 if [ $# -eq 0 ]; then
-  cat << EOF >&2
+  cat <<EOF >&2
 Usage: $0 [-l|-u] [-r retries] LOCKFILE
 Where -l requests a lock(the default), -u requests an unlock, -r X
 specifies a max number of retries before it fails(default=$retries).

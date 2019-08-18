@@ -3,7 +3,7 @@
 #   of the specified file, accepting some of the standard dir flags
 
 function usage{
-cat << EOF >&2
+cat <<EOF >&2
     Usage: $0 [DOS flags] directory or directories
     Where:
     /D        sort by columns
