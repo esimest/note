@@ -66,8 +66,9 @@ Internal Bitmap : 8 sectors from superblock
 # 2. 清除磁盘 raid 信息
 ## 查看磁盘对应的 raid 卷信息(如 md0 md1 ...)
 lsblk
-## 关闭对应 raid 盘，如关闭 md0 为以下命令
+## 关闭对应 raid 盘并删除对应的逻辑盘，如关闭 md0 为以下命令
 mdadm --stop /dev/md0
+rm -f /dev/md0
 ## 清空磁盘的 raid 信息
 ls /dev/ | egrep "sd[^a]" | xargs -i -n1 mdadm --zero-superblock /dev/{}
 ## 如果磁盘有分区，则需删除分区，下列命令为删除分区 1

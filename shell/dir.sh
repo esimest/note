@@ -2,8 +2,9 @@
 # dir.sh -- Pretends we're the dir command in DOS and displays the contents
 #   of the specified file, accepting some of the standard dir flags
 
-function usage{
-cat <<EOF >&2
+function usage()
+{
+cat << EOF >&2
     Usage: $0 [DOS flags] directory or directories
     Where:
     /D        sort by columns
