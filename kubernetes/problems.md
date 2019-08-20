@@ -5,5 +5,4 @@
   > 解决 `kubectl create clusterrolebinding system:anonymous   --clusterrole=cluster-admin   --user=system:anonymous`
 
 - Pod 一直处于 Pending 状态，describe 报错 NoMatchedLocalDisk
-
-> 查看 kubelet 的配置，查看磁盘对应的配置的路径
+   > 查看 kubelet 的配置，查看磁盘对应的配置的路径
