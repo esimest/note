@@ -14,6 +14,29 @@
    `yum -y install https://centos7.iuscommunity.org/ius-release.rpm`
    `yum install -y python36u python36u-pip python36u-devel`
 
+- Docker
+
+```shell
+# 下载 docker yum 源
+cd /etc/yum.repos.d && wget https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/docker-ce.repo
+# 替换变量
+sed -i 's/https:\/\/download.docker.com/https:\/\/mirrors.tuna.tsinghua.edu.cn\/docker-ce/g' /etc/yum.repos.d/docker-ce.repo
+
+# 安装dokcer
+yum install -y docker-ce
+
+# 镜像加速
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+"registry-mirrors": ["https://sx6i79oq.mirror.aliyuncs.com"]
+}
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+```
+
 ## 软件下载链接
 
 - [flannel](https://github.com/coreos/flannel/releases)
