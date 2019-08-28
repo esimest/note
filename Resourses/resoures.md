@@ -10,6 +10,10 @@
 
 > `rpm -ivh https://centos7.iuscommunity.org/ius-release.rpm`
 
+- Python
+   `yum -y install https://centos7.iuscommunity.org/ius-release.rpm`
+   `yum install -y python36u python36u-pip python36u-devel`
+
 ## 软件下载链接
 
 - [flannel](https://github.com/coreos/flannel/releases)
