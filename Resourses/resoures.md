@@ -42,6 +42,21 @@ sudo systemctl restart docker
 
 ```
 
+- pip 源
+
+```shell
+# pip.conf/pip.ini
+[global]
+timeout = 60
+index-url = https://pypi.doubanio.com/simple
+
+# linux 存放目录
+$HOME/.config/pip/pip.conf 或 $HOME/.pip/pip.conf
+
+# windows 存放目录
+%APPDATA%\pip\pip.ini 或%HOME%\pip\pip.ini
+```
+
 ## 软件下载链接
 
 - [flannel](https://github.com/coreos/flannel/releases)
