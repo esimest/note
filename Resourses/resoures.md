@@ -22,6 +22,11 @@ cd /etc/yum.repos.d && wget https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux
 # 替换变量
 sed -i 's/https:\/\/download.docker.com/https:\/\/mirrors.tuna.tsinghua.edu.cn\/docker-ce/g' /etc/yum.repos.d/docker-ce.repo
 
+# 安装 docker 依赖
+yum install -y wget screen yum-utils device-mapper-persistent-data lvm2
+
+modprobe br_netfilter
+
 # 安装dokcer
 yum install -y docker-ce
 
