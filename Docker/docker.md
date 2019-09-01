@@ -132,3 +132,20 @@ docker load -i ig_name.release.tar.gz
 # push 上面 load 的镜像
 docker push $(docker images | grep $(echo "${img_name}" |cut -d '.' -f1) |awk '{print $1":"$2}')
 ```
+
+2019.09.01
+
+----
+
+```shell
+# 容器互联
+## --link 会在新容器内添加对 ${container_name} 和 ${alias} 的 hosts 解析
+docker run --link ${container_name}:${alias} img_name
+
+# 查看主机端口到容器端口映射情况
+docer port ${container_name} [port_in_container]
+
+# 共享容器数据卷
+# 新容器使用 src_container 容器的数据卷
+docker run --volumes-from ${src_container} img_name
+```
