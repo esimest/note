@@ -149,3 +149,17 @@ docer port ${container_name} [port_in_container]
 # 新容器使用 src_container 容器的数据卷
 docker run --volumes-from ${src_container} img_name
 ```
+
+2019.09.03
+
+----
+
+```shell
+# jenkins 构建时报错 Couldn't connect to Docker daemon at http+docker://localhost - is it running?
+/etc/docker/daemon.json 添加 "hosts": ["fd://", "tcp://0.0.0.0:2375"],
+添加 export DOCKER_HOST='TCP://127.0.0.1:2375'
+
+# jenkins 构建时找不到 /usr/local/bin 目录下的 docker-compse
+软链 到 /usr/bin 目录下
+
+```
