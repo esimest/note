@@ -1,0 +1,17 @@
+---
+- name: Just for learn
+  hosts: all
+  gather_facts: False
+  vars:
+  - name: value
+  tasks:
+  - name: Say Hello
+    shell: ech "Hello"
+    register: say_hello
+    when: inventory_hostname ==  'registry'
+    ignore_errors: True
+  - name: get vars values
+    debug: msg=" {{ say_hello['rc'] }}"
+    when: inventory_hostname ==  'registry'
+  - name: get vars type
+    debug: msg="{{ hostvars['bk1']['ansible_ssh_host'] }}"

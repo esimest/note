@@ -20,13 +20,19 @@
 host_key_checking = False
 ```
 
+## 模板
+
+> 在 模板文件中可以使用 jin2 的循环与条件语句，但是在 playbook 中不可以
+
+- 如果语句以 {{ var }} 开始，则需要给 {{ var }} 加上双引号
+
 ## inventory
 
 > inventory 常用变量
 > 指定密码可以使用 ansible_password 或 ansible_ssh_pass 但是不能用 ansible_pass
 > 使用 ansible 成功连接到目标主机后， ansible 会将连接信息缓存至 ~/.ansible 目录下(这样，inventory 不指定密码时也可以使用 ansible 连接)
 > 缓存会保存多久暂时还不知道
-
+> 一下变量名可在 playbook 以及 模板文件中直接调用，inventory_hostname 为主机名，没定义默认为主机 IP
 Name                       | Default         | Description
 :--                        | :---            | :--
 ansible_host               | Name            | of host Hostname or IP address to SSH to
@@ -68,12 +74,13 @@ ansible_python_interpreter | /usr/bin/python | Python interpreter on host (see t
 'inventory_file'
 'inventory_dir'
 'groups'
-'group_names'
+'group_names'  # 获取包含该主机的组
 'omit'
 'playbook_dir'
 'play_hosts'
 'role_names'
 'ungrouped'
+'hostvars' # 可以获取所有主机的主机变量(常用于获取其它主机的变量)
 ```
 
 ## Copy 模块
