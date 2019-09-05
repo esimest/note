@@ -38,6 +38,11 @@ ansible_private_key_file   | (None)          | SSH private key to use for SSH au
 ansible_shell_type         | sh              | Shell to use for commands (see the following section)
 ansible_python_interpreter | /usr/bin/python | Python interpreter on host (see the following section)
 
+```shell
+# 在模板文件以及 play-book 中获取 inventory 的信息
+
+```
+
 ## 关于 ad-hoc
 
 > 建议使用 shell 而不是默认的 command 模块
