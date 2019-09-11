@@ -1,4 +1,0 @@
----
-- hosts: master
-  tasks:
-  - name:

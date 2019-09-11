@@ -1,8 +1,0 @@
-KUBELET_OPTS="--logtostderr=true \
---v=4 \
---hostname-override= {{ ansible_default_ipv4['address'] }} \
---kubeconfig=/data/kubernetes/conf/kubelet.kubeconfig \
---bootstrap-kubeconfig=/data/kubernetes/conf/bootstrap.kubeconfig \
---config=/data/kubernetes/conf/kubelet.config \
---cert-dir=/data/kubernetes/cfssl \
---pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0"
