@@ -1,17 +1,30 @@
 # 一级标题
 
-## 二级标题
+一级标题
+=========
+
+二级标题
+---------
+
+> ## 二级标题
 
 ### 三级标题
 
 #### 四级标题
 
+**四级标题大小就跟普通段落文字差不多大了。**
+
 ##### 五级标题
 
 ###### 六级标题
 
-> **加粗字体**
-> *倾斜字体*
+你好，我是段落一。
+
+你好，我是段落二。
+你好，我是段落三。(段落二后面有两个个空格)
+
+**加粗字体**
+*倾斜字体*
 
 ***倾斜加粗***
 
@@ -34,6 +47,8 @@
 - 列表元素
 
 [超链接没感叹号](http://www.baidu.com)
+
+<https://google.com>
 
 1. 有序列表
 2. 列表内容
@@ -59,11 +74,17 @@
 
 ```python
 def fun():
-    return
+    pass
 ```
 
 ```python
 # python hello world
 print('hello world')
 
+```
+
+```sequence
+Alice->Bob: Hello Bob, how are you?
+Note right of Bob: Bob thins
+Bob->Alice: I am good thanks.
 ```
