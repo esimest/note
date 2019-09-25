@@ -62,3 +62,14 @@ $HOME/.config/pip/pip.conf 或 $HOME/.pip/pip.conf
 - [flannel](https://github.com/coreos/flannel/releases)
 
 - [etcd](https://github.com/coreos/etcd/releases)
+
+- go 环境变量
+
+```shell
+GOROOT  go 安装路径
+GOBIN $GOROOT/bin
+
+GOPATH 项目路径，可以有多个值。windows 下以分号分隔，linux 下以冒号分隔
+go get 安装目录默认为 GOPATH 中的第一个路径
+GOPROXY=https://goproxy.io 代理源(需设置 GO111MODULE=on )
+```
