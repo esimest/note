@@ -144,7 +144,7 @@
 ## Python Settings
 
 ```shell
-pip install ipython pep8 pytest rope jedi
+pip install ipython pep8 pytest rope jedi autopep8 pylint isort
 ```
 
 ## 配置 vscode 为 git 编辑器
