@@ -28,6 +28,10 @@ kubectl create clusterrolebinding system:anonymous \
 kubectl delete clusterrolebinding system:anonymous
 ```
 
+## ServiceAccount
+
+## UserAccount
+
 ## Kubeconfig
 
 集群开启 TLS 认证后，与集群交互都需要身份认证。
