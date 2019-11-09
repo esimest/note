@@ -28,3 +28,4 @@ HTTPS = HTTP + SSL/TLS
 - X509: TLS 证书的标准(确定了证书内应该包含哪些内容)
 - CA(Certificate Authority 证书颁发机构): 用于颁发证书，验证证书的合法性
 
+## 使用 openssl 生成 x509 证书 + 密钥
