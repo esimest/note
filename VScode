@@ -156,3 +156,14 @@ pip install ipython pep8 pytest rope jedi autopep8 pylint isort
 ```yaml
 "Extension host terminated execptedly": "新装的插件不兼容，卸载掉即可"
 ```
+
+## Go Settings
+
+```shell
+# 会影响到格式化工具对代码的自动补全(如 import/package)
+go.useLanguageServer  # 甚用
+
+# 不通的 go 设置会产生不同的 tools 列表
+## 如 "go.formatTool": "goimports" 会使用 goimports 代替 goreturn
+
+```
