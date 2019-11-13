@@ -9,6 +9,12 @@
 
 - 代码片段 (code snippet)
 
+## 迁移 VSCode
+
+1. 下载最新版 VSCode 安装程序，按流程安装
+2. 将源主机的 %APPDATA%/Code, %USERPROFILE%.vscode\extensions
+   拷贝至目标主机同名目录
+
 ## Code User Settings
 
 ```json

@@ -3,8 +3,6 @@
 - 切换
   > 如果打开就关闭，如果没打开就打开
 
-## 内置快捷键
-
 ### 通用类
 
 ```
@@ -13,24 +11,60 @@ Ctrl K + Ctlr S
 ```
 
 ### 视图类
-```
+
+#### 关闭类
+```shell
 # 关闭所有 Groups
-Ctrl K + Ctrl Shift W
+Ctrl + K Ctrl + Shift + W
 
 # 关闭所有 Editors 但是不关闭 Groups
-Ctrl K + Ctrl W
+Ctrl + K Ctrl + W
 
-# 关闭当前 Group 内的所有 Editors
-Ctrl K + W
+# 关闭当前 Group
+Ctrl + K W
 
 # 关闭当前 Editor
 Ctrl + W(F4)
 
 # 关闭当前 Group 中已保存了的 Editor
-Ctrl K + U
+Ctrl + K U
 
-# 切换调试终端
-Ctrl + Shift + Y
+# 关闭 WorkSpace
+Ctrl + K + F
+```
+#### 打开类
+```shell
+# 打开 Debug 视图
+Ctrl + Shift + D
+
+# 打开资源管理器视图
+Ctrl + Shift + E
+
+# 打开扩展视图
+Ctrl + Shfit + X
+
+# 打开源码管(Git)理视图
+Ctrl + Shift + G
+
+# 打开搜索(搜索模式)视图
+Ctrl + Shift + F
+
+# 打开搜索(替换模式)视图
+Ctrl + Shift + H
+
+# 快速打开视图(SideBar Explore Docker Git ...)
+Ctrl + Q
+
+# 打开已关闭的 Editor
+Ctrl + Shift + T
+
+```
+
+#### 选择类(光标移动)
+
+```shell
+# 从所有 Group 中选择 Editor
+Ctrl K + Ctrl P
 
 # 将光标转移到第 n(n > 0) 个 Group 中的 Editor
 Ctrl + n
@@ -44,6 +78,28 @@ Ctrl K + Ctrl (Up/Down/Left/Right)Arrow
 # Keep Editor
 Ctrl K + Enter
 
+# 打开当前 Group 中最后一个 Editor
+Ctrl + 9
+
+# 打开当前 Group 中第一个 Editor
+Alt + 0
+
+# 打开当前 Group 中左侧的 Editor
+Ctrl + PageUp
+
+# 打开当前 Group 中右侧的 Editor
+Ctrl + PageDown
+
+# 按时间顺序打开最近的 Editor
+Ctrl + Tab
+
+# 按时间顺序打开最久的 Editor
+Ctrl + Shift + Tab
+```
+
+#### 移动类
+```shell
+
 # 将当前 Group 整体向上/下/左/右移动(相对的会改变其它 Group 的位置)
 Ctrl K + (Up/Down/Left/Right)Arrow
 
@@ -55,36 +111,74 @@ Shift + Alt + 9
 
 # 将当前 Editor 移至右侧 Group
 Ctrl + Alt + RightArrow
+
 # 将当前 Editor 移至上左侧 Group
 Ctrl + Alt + LeftArrow
 
 # 将当前 Editor 在当前 Group 向左移一位
-Ctrl + Shift + PageDown
-
-# 将当前 Editor 在当前 Group 向右移一位
 Ctrl + Shift + PageUp
 
-# 打开当前 Group 中最后一个 Editor
-Ctrl + 9
+# 将当前 Editor 在当前 Group 向右移一位
+Ctrl + Shift + PageDown
 
-# 打开当前 Group 中第一个 Editor
-Alt + 0
+```
 
-# 打开当前 Group 中下一个 Editor
-Ctrl + PageDown
+#### 切换类
+```shell
+# 切换 Debug Console 面板
+Ctrl + Shift + Y
 
-# 打开当前 Group 中上一个 Editor
-Ctrl + PageUp
+# 切换终端
+Ctrl \`
 
-# 打开当前 Group 中最近一次使用的 Editor
-Ctrl + Tab
+# 切换输出面板
+Ctrl + Shift + U
 
-# 打开当前 Group 中最久没被使用过的 Editor
-Ctrl + Shift + Tab
+# 切换面板
+Ctrl + J
 
-# 快速打开视图(SideBar Explore Docker Git ...)
-Ctrl + Q
+# 切换 Problem 面板
+Ctrl + Shift + M
 
-# 打开已关闭的 Editor
-Ctrl + Shift + T
+# 切换 Side Bar
+Ctrl + B
+
+# 切换 Group 横竖模式
+Shift + Alt + 0
+
+```
+
+#### 字体调整
+```shell
+# 还原字体大小
+Ctrl + Num(0)
+
+# 字体变大
+Ctrl + (=/+)
+Ctrl + Num(+)
+Ctrl + Shift + (=/+)
+
+# 字体变小
+Ctrl + (-/_)
+Ctrl + Num(-)
+Ctrl + Shift(-/_)
+```
+
+#### 分屏类
+
+```shell
+# 横向切分 Editor
+Ctrl + \
+
+# 纵向切分 Editor
+Ctrl K + Ctrl \
+
+# 切换全屏
+F11
+
+# Toggle Word Wrap
+Alt + Z
+
+# 切换禅模式
+Ctrl + K Z
 ```
