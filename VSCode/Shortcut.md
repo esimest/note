@@ -3,16 +3,96 @@
 - 切换
   > 如果打开就关闭，如果没打开就打开
 
-### 通用类
 
-```
+## 通用类
+
+```shell
 # 打开快捷键面板
 Ctrl K + Ctlr S
+
+# 关闭软件
+Ctrl + Shift + W
+
+######## 加解密 ############
+# 将选中文本使用 Base64 加密
+Ctrl + K Ctrl + E
+
+# 解密
+Ctrl + K Ctrl + D
+#########################
+
+######## 复制粘贴 ############
+# 选中内容向下/上复制
+Shift + Alt + Down/Up
+
+#############################
+
 ```
 
-### 视图类
+## 导航类
 
-#### 关闭类
+```shell
+# 光标位置回退/前进(跟浏览器类似的)
+Alt + Left/Right
+```
+
+## 光标操作
+
+### 移动
+
+```shell
+########## 单光标移动 ################
+# 光标向下/上移动一行
+Down/Up
+
+# 光标向下/上移动一页
+PageDown/PageUp
+
+# 移动光标到 Editor 底/顶部
+Ctrl + End/Home
+
+# 光标移至行尾/首
+End/Home
+
+# 光标向左/右移动一个单词的距离
+Ctrl + Left/Right
+
+########### 多光标移动 ##################
+# 向下/上一行添加光标
+Ctrl + Alt + Down/Up
+Ctrl + Shift + Alt + Down/Up
+
+# 向下/上一页中的每行加一个光标
+Ctrl + Shift + Alt + PageDown/PageUp
+
+```
+
+### 选择
+
+```shell
+# 光标移至 Editor 底/顶部，并选择内容
+Ctrl + Shift + End/Home
+
+# 光标移至行尾/首，并选择内容
+Shift + End/Home
+
+# 光标向左/右移动，并选中移动区域
+Ctrl + Shift + Alt + ArrowLeft/ArrowRight
+Shift + ArrowLeft/ArrowRight
+
+# 光标向下/上移动一页并选中内容
+Shift + PageDown/PageUp
+
+# 光标向下/上移动，并选中内容
+Shift + ArrowDown/ArrowUp
+
+# 选中光标向左/右一个单词的内容
+Ctrl + Shift + Left/Right
+```
+
+## 视图类
+
+### 关闭类
 ```shell
 # 关闭所有 Groups
 Ctrl + K Ctrl + Shift + W
@@ -32,7 +112,7 @@ Ctrl + K U
 # 关闭 WorkSpace
 Ctrl + K + F
 ```
-#### 打开类
+### 打开类
 ```shell
 # 打开 Debug 视图
 Ctrl + Shift + D
@@ -60,7 +140,7 @@ Ctrl + Shift + T
 
 ```
 
-#### 选择类(光标移动)
+### 选择类(光标移动)
 
 ```shell
 # 从所有 Group 中选择 Editor
@@ -97,7 +177,7 @@ Ctrl + Tab
 Ctrl + Shift + Tab
 ```
 
-#### 移动类
+### 移动类
 ```shell
 
 # 将当前 Group 整体向上/下/左/右移动(相对的会改变其它 Group 的位置)
@@ -123,7 +203,7 @@ Ctrl + Shift + PageDown
 
 ```
 
-#### 切换类
+### 切换类
 ```shell
 # 切换 Debug Console 面板
 Ctrl + Shift + Y
@@ -148,7 +228,7 @@ Shift + Alt + 0
 
 ```
 
-#### 字体调整
+### 字体调整
 ```shell
 # 还原字体大小
 Ctrl + Num(0)
@@ -164,7 +244,7 @@ Ctrl + Num(-)
 Ctrl + Shift(-/_)
 ```
 
-#### 分屏类
+### 分屏类
 
 ```shell
 # 横向切分 Editor
