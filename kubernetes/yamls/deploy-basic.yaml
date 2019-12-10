@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: deploy-test
+  labels:
+    name: deploy-test
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: deploy-test
+  template:
+    metadata:
+      labels:
+        name: deploy-test
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: deploy-test
+spec:
+  selector:
+    name: deploy-test
+  type:  ClusterIP
+  ports:
+  - name: tcp-80
+    protocol: TCP
+    port:  80
+    targetPort:  80
+

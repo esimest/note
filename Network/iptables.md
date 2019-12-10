@@ -81,6 +81,7 @@ iptables -R ${num} ${rule}
   > 当收到要通过防火墙发送给其他网络地址的数据包时，应用此链的规则。
 - POSTRUOTUNG
   > 在对数据包做路由选择之后，应用此链的规则。
+
 ![规则链](./images/iptables规则链.png)
 
 ## 表
