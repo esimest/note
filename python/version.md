@@ -4,7 +4,7 @@
 
 ```python3
 # nonlocal, async, await 为新增关键字
-# exec 之前是关键字，现在是内置函数
+# exec, print 之前是关键字，现在是内置函数
 ```
 
 ## 编码
@@ -13,7 +13,7 @@
 
 ## 内置函数
 
-> ascii(), exec(), breakpoint()
+> ascii(), exec(), breakpoint(), print()
 > reduce() 移动到了 functools 模块下
 
 ## 语法特性
@@ -23,6 +23,8 @@
 
 
 ## 包管理
+
+> 现在不需要再目录中添加 __init__.py 用以声明目录为模块
 
 ## 协程
 
