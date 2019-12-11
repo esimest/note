@@ -106,6 +106,6 @@ END {
 ## awk 实现单词统计(每行一个单词)
 
 ```awk
-cat file | awk '{for(i=1; i<=NF; i++) array[$1]++}END{for(i in array) print i, array[i]}'
+awk '{array[$1]++}END{for(i in array) print i, array[i]}' ${file_name}
 ```
 
