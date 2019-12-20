@@ -173,3 +173,19 @@ go.useLanguageServer  # 甚用
 ## 如 "go.formatTool": "goimports" 会使用 goimports 代替 goreturn
 
 ```
+
+## JS Setting
+
+```json
+// Code 配置 jquery 语法支持
+// 在项目根目录添加 jsconfig.json
+{
+  "exclude": ["node_modules"],
+  "typeAcquisition": {
+    "include": [
+      "jquery"
+    ]
+  }
+}
+```
+
