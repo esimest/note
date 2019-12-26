@@ -31,6 +31,7 @@ ss -p
 
 ## 查看进程与端口监听
 ss -lntp | grep ${port}
+ss -lntp state dport = :${port} or sport = :${port}
 
 ## 查看已建立的 TCP 连接数
 ss -ant state established | wc -l
