@@ -4,25 +4,25 @@
 
 - `D`: 不可中断的睡眠 (通常为等待 IO) == 无法接收信号
 - `R`: 运行中或可运行(当前进程在运行队列中)
-- `S`: 可中断的睡眠 (通常为等待某个时间完成) == 可以通过信号结束该进程
+- `S`: 可中断的睡眠 (通常为等待某个事件完成) == 可以通过信号结束该进程
 - `T`: 被任务管理信号关闭
-- `t`: 在跟踪期被调试期关闭
+- `t`: 在跟踪期被调试器关闭
 - `X`: 死亡状态(不可能出现在 ps 的结果中)
-- `Z`: 僵死, 终止后没有被父进程启动.
+- `Z`: 僵死, 终止后没有被父进程重新启动.
 
 ### 对于 BSD 的格式有以下特殊输出
 
-- `<`: 优先级高
+- `<`: 优先级高.
 
-- `N`: 优先级低
+- `N`: 优先级低.
 
-- `L`: `has pages locked into memory (for real-time and custom IO)`
+- `L`: `has pages locked into memory (for real-time and custom IO)`.
 
-- `s`: 该进程是会话的维护进程
+- `s`: 该进程是会话的维护进程.
 
-- `l`: 多线程进程
+- `l`: 多线程进程.
 
-- +`: 前台进程组中的进程
+- `+`: 前台进程组中的进程.
 
 ## 选项
 
@@ -34,12 +34,11 @@ options 分以下三类(最好不要混用):
 - UNIX 风格 options,以 `-` 开头如 ps -ef
 - GUN 风格 options, 以 `--` 开头
 
-
 ### 结果过滤类选项
 
-- `a`: 列出所有带有终端 (tty) 的进程, 和 `a` 选项一起使用会列出所有进程.
+- `a`: 列出所有带有终端 (tty) 的进程, 和 `x` 选项一起使用会列出所有进程.
 
-- `x`: 列出当前用户所有进程 ( 和 ps 进程的 EUID 相同的进程 ), 和 `x` 选项一起使用会列出所有进程.
+- `x`: 列出当前用户所有进程 ( 和 ps 进程的 EUID 相同的进程 ), 和 `a` 选项一起使用会列出所有进程.
 
 - `g`: 列出当前用户所有带终端 (tty) 的进程.
 
@@ -51,11 +50,20 @@ options 分以下三类(最好不要混用):
 
 - `-d`: 列出所有与会话维持无关的进程. (与会话维持有关的进程有 `bash`).
 
+- `r`: 列出所有正在运行的进程.
+
+```shell
+[root@localhost ~]# ps ax | wc -l
+168
+[root@localhost ~]# ps -e | wc -l
+168
+```
+
 ### 结果过滤(通过参数列表)
 
-- `-p/--pid/-${pid}`: 列出 pid 对应的进程号的进程, `-p` 与 `--pid` 后可以指定列表 `"1 2"/ 1,2 `.
+- `-p/--pid/-${pid}`: 列出 pid 对应的进程号的进程, `-p` 与 `--pid` 后可以指定列表 `"1 2"/ 1,2`.
 
-- `-C ${cmdlist}`: 列出命令名为 cmdlist 指定的命令名的进程.
+- `-C ${cmdlist}`: 列出命令名为 `cmdlist` 指定的命令名的进程.
 
 - `-G ${grouplist}/--Group=${grouplist}`: 列出所有真实所属组 ID 与 组名 在 grouplist 中的进程.
 
@@ -87,7 +95,7 @@ options 分以下三类(最好不要混用):
 
 - `j`: 输出 `PPID PID PGID SID TTY TPGID STAT UID TIME COMMAND`
 
-- `-j`: 输出 ` PID PGID SID TTY TIME CMD`
+- `-j`: 输出 `PID PGID SID TTY TIME CMD`
 
 - `l`: 输出 `F UID PID PPID PRI NI VSZ RSS WCHAN STAT TTY TIME COMMAND`
 
@@ -119,7 +127,7 @@ options 分以下三类(最好不要混用):
 
 - `--headers`: 当输出跨多个页面时，每页第一行输出标题行. (配合 `--lines/--rows` 一起使用)
 
-- `k/--sort`: 排序
+- `k/--sort=`: 排序
 
 - `n`: 数字显示 `WCHAN` 和 `USER` 列对应的值
 
@@ -211,7 +219,7 @@ options 分以下三类(最好不要混用):
 | blocked | BLOCKED || sig_block, sigmask |
 | bsdstart | START | 命令启动时间 | lstart, start, start_time, stime |
 | bsdtime  | TIME | 进程使用的 CPU 时间( uset + sys ) | 无 |
-| c | C | 处理器使用率 | 进程声明周期内的 CPU 使用率(整数表示) | %cpu |
+| c | C | 处理器使用率 | 进程生命周期内的 CPU 使用率(整数表示) | %cpu |
 | caught | CAUGHT | 无 | |
 | cgroup | CGROUP | 进程所属的控制组 | 无 |
 | class | CLS | 进程的调度类别  | policay, cls|
