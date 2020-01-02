@@ -309,7 +309,7 @@ options 分以下三类(最好不要混用):
 
 - `LC_TIME`: 时间格式
 
-- ` PS_COLORS`: 暂不支持
+- `PS_COLORS`: 暂不支持
 
 - `PS_FORMAT`: 默认的输出列组合
 
@@ -324,7 +324,6 @@ options 分以下三类(最好不要混用):
 - `UNIX95`: `Don't find excuses to ignore bad "features".`
 
 - `_XPG`: 关闭 `CMD_ENV=irix` 的行为
-
 
 ## 命令使用
 

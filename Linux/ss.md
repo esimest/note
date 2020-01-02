@@ -40,11 +40,12 @@ ss -ant state established | wc -l
 
 ## 输出内容
 
+- Netid: 套接字类型
 - Recv-Q: 接收队列
 - Send-Q: 输出队列
 - State: 连接状态
-- Local Address: 连接本机的本机 ip(当有本机有多个 ip 时, 0.0.0.0 表示所有本机的 ip)
-- Peer Address: 连接本机的外部 ip
+- Local Address: 本机监听的 IP:PORT(如果 ip==127.0.0.1 则只能本机访问)
+- Peer Address: 如果套接字已连接, 显示对端的 ip:port
 
 ### 连接状态
 
@@ -60,3 +61,21 @@ ss -ant state established | wc -l
 10. CLOSING
 11. CLOSED
 12. UNKNOWN
+
+### 套接字类型
+
+- tcp
+
+- udp
+
+- raw
+
+- u_str(unix_stream)
+
+- u_dgr(unix_datagram): unix 数据报
+
+- nl(netlink)
+
+- p_dgr: 数据报套接字
+
+- p_raw: raw 包套接字
