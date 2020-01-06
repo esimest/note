@@ -5,7 +5,6 @@
 > 通过 label selector 将 pod 与 service 绑定(多对一), 从而实现了应用的一个统一访问入口
 > 以及解决了 pod 重新调度导致 ip 变化不可控的问题
 
-
 ## 分类
 
 ### ClusterIP

@@ -19,6 +19,7 @@ kubectl get clusterrole
 ## RoleBinding 与 ClusterRoleBinding
 
 通过创建角色绑定将用户与某个角色绑定，从而使用户具备某种权限。
+
 ```shell
 # 创建匿名用户使其具备管理员权限
 kubectl create clusterrolebinding system:anonymous \
@@ -37,7 +38,7 @@ kubectl delete clusterrolebinding system:anonymous
 集群开启 TLS 认证后，与集群交互都需要身份认证。
 kubeconfig 用于配置认证系统，使得可以通过 kubeconfig 与多个集群交互
 
-```
+```shell
 # 设置集群信息，当需要配置多个集群时，通过集群名指定特定的集群
 kubectl config set-cluster cluster_name --server='127.0.0.1:8080'
 

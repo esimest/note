@@ -8,6 +8,9 @@ docker run [options] ${image} [command]
 
 # 容器停止时自动删除容器
 docker run --rm [options] ${image} [command]
+
+# 查看容器 IP 地址
+docker inspect -f='{{.NetworkSettings.IPAddress}}' ${container_id}
 ```
 
 ## Alias
