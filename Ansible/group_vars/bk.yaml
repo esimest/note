@@ -1,3 +1,0 @@
----
-ntp_server: acme.example.org
-database_server: storage.example.org

@@ -1,4 +1,4 @@
-# Ansible.md
+# Ansible
 
 ## 关于 ansible.cfg
 
@@ -22,9 +22,9 @@ host_key_checking = False
 
 ## 模板
 
-> 在 模板文件中可以使用 jin2 的循环与条件语句，但是在 playbook 中不可以
+> 在模板文件中可以使用 jin2 的循环与条件语句，但是在 playbook 中不可以
 
-- 如果语句以 {{ var }} 开始，则需要给 {{ var }} 加上双引号
+- 如果语句以 {{ var }} 开始，则需要给 {{ var }} 加上双引号, 如 "{{ var }}"
 
 ## inventory
 
@@ -32,7 +32,7 @@ host_key_checking = False
 > 指定密码可以使用 ansible_password 或 ansible_ssh_pass 但是不能用 ansible_pass
 > 使用 ansible 成功连接到目标主机后， ansible 会将连接信息缓存至 ~/.ansible 目录下(这样，inventory 不指定密码时也可以使用 ansible 连接)
 > 缓存会保存多久暂时还不知道
-> 一下变量名可在 playbook 以及 模板文件中直接调用，inventory_hostname 为主机名，没定义默认为主机 IP
+> 以下变量名可在 playbook 以及 模板文件中直接调用, inventory_hostname 为主机名, 没定义默认为主机 IP
 Name                       | Default         | Description
 :--                        | :---            | :--
 ansible_host               | Name            | of host Hostname or IP address to SSH to
@@ -59,7 +59,7 @@ ansible_python_interpreter | /usr/bin/python | Python interpreter on host (see t
 ### 变量
 
 - playbook 中 shell 参数使用变量
-- playbook 中 参数使用 $() 为变量
+- playbook 中参数使用 $() 为变量
 - 字符串嵌套引号
 
 ```shell
