@@ -1,4 +1,22 @@
-# Kubernetes Docker 命令
+# Kubernetes Commands
+
+## Kubernetes 主要功能
+
+1. 服务发现与负载均衡(Service)
+
+2. 容器自动装箱(Schduler)
+
+3. 存储编排
+
+4. 自动容器恢复(Controller)
+
+5. 自动发布与回滚(rollout)
+
+6. 配置与密文管理(ConfigMap, Secret)
+
+7. 批量执行(Job)
+
+8. 水平伸缩(Scale)
 
 ## 常用 kubectl 命令
 
@@ -32,6 +50,9 @@ kubectl label nodes ${node_name} ${key}=${value}
 
 # 覆盖 node 上的标签
 kubectl label nodes ${node_name} ${key}=${value} --over-write
+
+# 实时检测资源的变化
+kubect get --watch ${object}
 ```
 
 ## 常用别名

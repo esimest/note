@@ -35,7 +35,7 @@
 
 > Status 描述了该对象现在的状态
 
-### Pod_Status
+### Pod Status
 
 - phase(阶段): 描述了 Pod 处于生命周期的哪个状态
   1. Pending(等待): Pod 已被 Kubernetes 接受，但是 Container 的创建还没完成
