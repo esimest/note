@@ -1,27 +1,59 @@
-# Kubernetes 对象
+# Kubernetes 对象属性
 
-> API 对象是 Kubernetes 集群中的管理操作单元
-> 每个 API 对象都有三大类属性 : metadata(元数据) spec(描述/规范) status(状态)
+> API 对象是 Kubernetes 集群中的管理操作单元.
+> 每个 API 对象都有三大类属性 : metadata(元数据) spec(描述/规范) status(状态).
 
-## API 对象属性
-
-### Metadata
+## Metadata
 
 > namespace, name, uid 是每个 API 对象都必须有的元数据
 
-- namespace: 对象所在的名称空间
+### namespace
 
-- name: 对象的名字（集群中的唯一标识）
+对象所在的名称空间
 
-- uid: 唯一标识
+### name
 
-- label: 打在对象上的标签，用来给对象分类
+对象的名字（集群中的唯一标识）
 
-### Spec
+### uid
+
+对象的唯一标识
+
+### label
+
+打在对象上的标签，用来给对象分类
+
+```shell
+# 查看标签
+kubectl get po --show-labels
+
+# 设置标签(标签不存在)
+kubectl label po ${key}=${val}
+
+# 修改标签(标签已存在)
+kubectl label po ${kye}=${val} --over-write
+
+# 标签匹配(相等型匹配`=;!=`, 逗号为 `&` 的作用)
+kubectl get po -l ${k1}=${v1},${k2}!=${v2} #逗号前后不能有空格
+
+# 标签匹配(集合型匹配 `in;not in`)
+kubectl get po -l '${key} in (${v1}, ${v2})'
+
+```
+
+### annotation
+
+存储资源的非标识性信息
+
+### ownerReferences
+
+指向创建该对象的对象(如 rs 创建的 pod 中的 ownerReferences 中存储的是 rs 的部分元数据)
+
+## Spec
 
 > Spec 描述了用户期望该对象达到的状态
 
-#### containers
+### containers
 
 > spec 中的 containers 字段定义了要在 pod 中启动的容器
 
@@ -31,7 +63,7 @@
 - livenessProbe
   > 存活探针：定义了容器存货状态的标准
 
-### Status
+## Status
 
 > Status 描述了该对象现在的状态
 
@@ -60,39 +92,3 @@
 4. CrashLoopBackOff : 容器曾经启动过但是又异常退出了
 5. Error : 启动过程中发生了异常
 6. Terminating
-
-## 资源对象
-
-### Pod
-
-### Node
-
-### NameSpace
-
-### RC RS Deployment
-
-### StatefulSet
-
-### DameonSet
-
-### Job CronJob
-
-### Service
-
-### Federation
-
-## 存储对象
-
-### Volume PV PVC
-
-### Secret
-
-### ConfigMap
-
-## 策略对象
-
-### RBAC
-
-## 身份对象
-
-### User Account、Service Account
