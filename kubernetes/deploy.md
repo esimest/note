@@ -102,6 +102,119 @@ Deployment 只负责管理不同版本的 ReplicaSet, 由 ReplicaSet 管理 Pod 
 
 ### 相关参数
 
+```go
+// DeploymentSpec specifies the state of a Deployment.
+type DeploymentSpec struct {
+	// Number of desired pods. This is a pointer to distinguish between explicit
+	// zero and not specified. Defaults to 1.
+	// +optional
+	Replicas int32
+
+	// Label selector for pods. Existing ReplicaSets whose pods are
+	// selected by this will be the ones affected by this deployment.
+   // +optional
+   // 选择器
+	Selector *metav1.LabelSelector
+
+   // Template describes the pods that will be created.
+   // pod 模板
+	Template api.PodTemplateSpec
+
+	// The deployment strategy to use to replace existing pods with new ones.
+   // +optional
+   // 部署策略
+	Strategy DeploymentStrategy
+
+	// Minimum number of seconds for which a newly created pod should be ready
+	// without any of its container crashing, for it to be considered available.
+	// Defaults to 0 (pod will be considered available as soon as it is ready)
+	// +optional
+	MinReadySeconds int32
+
+	// The number of old ReplicaSets to retain to allow rollback.
+	// This is a pointer to distinguish between explicit zero and not specified.
+	// This is set to the max value of int32 (i.e. 2147483647) by default, which means
+	// "retaining all old ReplicaSets".
+	// +optional
+	RevisionHistoryLimit *int32
+
+	// Indicates that the deployment is paused and will not be processed by the
+	// deployment controller.
+	// +optional
+	Paused bool
+
+	// DEPRECATED.
+	// The config this deployment is rolling back to. Will be cleared after rollback is done.
+	// +optional
+	RollbackTo *RollbackConfig
+
+	// The maximum time in seconds for a deployment to make progress before it
+	// is considered to be failed. The deployment controller will continue to
+	// process failed deployments and a condition with a ProgressDeadlineExceeded
+	// reason will be surfaced in the deployment status. Note that progress will
+	// not be estimated during the time a deployment is paused. This is set to
+	// the max value of int32 (i.e. 2147483647) by default, which means "no deadline".
+	// +optional
+	ProgressDeadlineSeconds *int32
+}
+
+// DeploymentStrategy stores information about the strategy and rolling-update
+// behavior of a deployment.
+type DeploymentStrategy struct {
+	// Type of deployment. Can be "Recreate" or "RollingUpdate". Default is RollingUpdate.
+	// +optional
+	Type DeploymentStrategyType
+
+	// Rolling update config params. Present only if DeploymentStrategyType =
+	// RollingUpdate.
+	//---
+	// TODO: Update this to follow our convention for oneOf, whatever we decide it
+	// to be.
+	// +optional
+	RollingUpdate *RollingUpdateDeployment
+}
+
+// DeploymentStrategyType defines strategies with a deployment.
+type DeploymentStrategyType string
+
+const (
+	// RecreateDeploymentStrategyType - kill all existing pods before creating new ones.
+	RecreateDeploymentStrategyType DeploymentStrategyType = "Recreate"
+
+	// RollingUpdateDeploymentStrategyType - Replace the old RCs by new one using rolling update i.e gradually scale down the old RCs and scale up the new one.
+	RollingUpdateDeploymentStrategyType DeploymentStrategyType = "RollingUpdate"
+)
+
+// RollingUpdateDeployment is the spec to control the desired behavior of rolling update.
+type RollingUpdateDeployment struct {
+	// The maximum number of pods that can be unavailable during the update.
+	// Value can be an absolute number (ex: 5) or a percentage of total pods at the start of update (ex: 10%).
+	// Absolute number is calculated from percentage by rounding down.
+	// This can not be 0 if MaxSurge is 0.
+	// By default, a fixed value of 1 is used.
+	// Example: when this is set to 30%, the old RC can be scaled down by 30%
+	// immediately when the rolling update starts. Once new pods are ready, old RC
+	// can be scaled down further, followed by scaling up the new RC, ensuring
+	// that at least 70% of original number of pods are available at all times
+	// during the update.
+	// +optional
+	MaxUnavailable intstr.IntOrString
+
+	// The maximum number of pods that can be scheduled above the original number of
+	// pods.
+	// Value can be an absolute number (ex: 5) or a percentage of total pods at
+	// the start of the update (ex: 10%). This can not be 0 if MaxUnavailable is 0.
+	// Absolute number is calculated from percentage by rounding up.
+	// By default, a value of 1 is used.
+	// Example: when this is set to 30%, the new RC can be scaled up by 30%
+	// immediately when the rolling update starts. Once old pods have been killed,
+	// new RC can be scaled up further, ensuring that total number of pods running
+	// at any time during the update is at most 130% of original pods.
+	// +optional
+	MaxSurge intstr.IntOrString
+}
+```
+
 - maxUnavailable
    > 滚动过程中最多有多少个 pod 不可用，默认值是25%
 
