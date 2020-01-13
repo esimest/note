@@ -7,3 +7,14 @@
 
 - Pod 一直处于 Pending 状态，describe 报错 NoMatchedLocalDisk
    > 查看 kubelet 的配置，查看磁盘对应的配置的路径
+
+## 日志不输出到日志目录
+
+### 问题描述
+
+配置选项添加了 --log-dir=${log_dir}, 并且创建了日志目录.
+但是日志不输出至日志目录中.
+
+### 解决
+
+需要将 --logtostderr 选项显示的置为 false.
