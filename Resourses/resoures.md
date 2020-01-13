@@ -2,25 +2,24 @@
 
 ## yum 源
 
-- ansible
+- Centos
+  > curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.cloud.tencent.com/repo/centos7_base.repo
 
-> `rpm -ivh https://mirror.webtatic.com/yum/el7/epel-release.rpm`
+- Epel
+  > curl -o /etc/yum.repos.d/epel.repo http://mirrors.cloud.tencent.com/repo/epel-7.repo
 
 - git
-
-> `rpm -ivh https://centos7.iuscommunity.org/ius-release.rpm`
+  > `rpm -ivh https://centos7.iuscommunity.org/ius-release.rpm`
 
 - Python
-   `yum -y install https://centos7.iuscommunity.org/ius-release.rpm`
-   `yum install -y python36u python36u-pip python36u-devel`
+   > `yum -y install https://centos7.iuscommunity.org/ius-release.rpm`
+   > `yum install -y python36u python36u-pip python36u-devel`
 
 - Docker
 
 ```shell
 # 下载 docker yum 源
-cd /etc/yum.repos.d && wget https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/docker-ce.repo
-# 替换变量
-sed -i 's/https:\/\/download.docker.com/https:\/\/mirrors.tuna.tsinghua.edu.cn\/docker-ce/g' /etc/yum.repos.d/docker-ce.repo
+curl -o /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 
 # 安装 docker 依赖
 yum install -y wget screen yum-utils device-mapper-persistent-data lvm2
@@ -71,5 +70,5 @@ GOBIN $GOROOT/bin
 
 GOPATH 项目路径，可以有多个值。windows 下以分号分隔，linux 下以冒号分隔
 go get 安装目录默认为 GOPATH 中的第一个路径
-GOPROXY=https://goproxy.io 代理源(需设置 GO111MODULE=on )
+GOPROXY=https://goproxy.cn 代理源(需设置 GO111MODULE=on )
 ```

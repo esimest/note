@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  backoffLimit: 4 # 失败重启次数
+  completions: 8 # 任务执行次数(总共要运行几个 pod)
+  parallelism: 2 # 任务并行数(同一时间可以运行多少个 pod)
+  template:
+    spec:
+      restartPolicy: OnFailure # pod 失败重启策略.
+      containers:
+      - name:
+        image: perl
+        command: ["/bin/sh"]
+        args: ["-c", "sleep 30; date"]
