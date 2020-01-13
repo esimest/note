@@ -6,11 +6,11 @@
 
 2. 容器自动装箱(Schduler)
 
-3. 存储编排
+3. 存储编排(Volume)
 
 4. 自动容器恢复(Controller)
 
-5. 自动发布与回滚(rollout)
+5. 自动发布与回滚(Rollout)
 
 6. 配置与密文管理(ConfigMap, Secret)
 
