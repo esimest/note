@@ -73,24 +73,12 @@ Linux 容器的“单进程”模型，指的是容器的生命周期等同于 P
    > 适配器容器将业务容器暴露出的接口转换为另一种格式
    ![适配器 sidecar](./images/adapter_sidecar.png)
 
-## Kubernetes 创建 Deployment 流程
+## Static Pod(静态 Pod)
 
-1. 客户端向 api-server 发送创建 deploy 的请求
+静态 pod 在特定节点上直接通过 kubelet 守护进程进行管理, 无法通过 api-server 进行管理(但是可以查看).
+静态 pod 的状态监控/管理都是由 kubelet 执行.
 
-2. 通过认证后，把 pod 数据存储到 etcd，然后创建 deploy 资源并初始化
+### 创建/运行 Static Pod
 
-3. 控制器管理器 watch api-server, 发现新的 deploy 将其加入工作队列中。
-   发现没有关联资源的 pod 和 rs。创建 rs 的控制器然后通过 rs 的管理器
-   创建 pod 的管理器
-
-4. 所有的 Controller 都 OK 后，将资源更新存储到 etcd
-
-5. scheduler watch api-server, 发现没有调度的 pod，经过主机过滤打分规则，
-   将 pod 绑定到合适的主机
-
-6. kubelet 每隔一段时间通过 nodename 向 api-server 同步对应 node 所需要运行
-   的 pod 清单。通过内部缓存和清单比较，对 pod 进行增减
-
-7. kubelet 通过 CRI 调用具体容器引擎启动容器
-
-8. 将本节点的 pod 信息同步到 etcd
+通过 `kubelet --pod-manifest-path=<the directory>` 或 `kubelet --pod-manifest-path=<directory>` 在 kubelt 启动时,
+指定 静态 pod 的配置文件目录/URL. kubelet 会定期进行扫描, 当有文件加入时会创建新 pod, 文件删除时会删除对应的 pod.
