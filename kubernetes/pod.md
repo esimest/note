@@ -82,3 +82,171 @@ Linux 容器的“单进程”模型，指的是容器的生命周期等同于 P
 
 通过 `kubelet --pod-manifest-path=<the directory>` 或 `kubelet --pod-manifest-path=<directory>` 在 kubelt 启动时,
 指定 静态 pod 的配置文件目录/URL. kubelet 会定期进行扫描, 当有文件加入时会创建新 pod, 文件删除时会删除对应的 pod.
+
+## Pod 配置管理
+
+pod 通过资源对应以及相应的 spec 选项进行应用的配置管理,
+如 配置文件, 身份认证, 容器资源使用限制等.
+
+![pod_management](./images/pod_management.png)
+
+### ConfigMap
+
+CM 主要用于管理运行运行所需的配置文件, 环境变量, 命令行参数等应用的**可变配置**.
+通过 CM 可以将容器镜像与配置解耦, 从而保障 pod 的可移植性.
+
+[configmap_define](./yamls/pod_management/configmap_define.yaml)
+
+[configmap_use](./yamls/pod_management/configmap_use.yaml)
+
+注意事项:
+
+1. CM 文件大小限制: 1MB(etcd 存储的数据不限制).
+
+2. Pod 只能引用相同 NS 中的 CM.
+
+3. Pod 引用的 CM 不存在时, 无法启动 Pod.
+
+4. 使用 valueFrom 加载 配置时, 部分配置加载失败,  Pod 依然可以正常创建.
+
+5. 只有通过 apiserver 创建的 Pod 可以使用 CM, 如 Static Pod 无法使用 CM.
+
+### Secret
+
+Secret 用于存储密码, token 等敏感资源信息.
+使用 base-64 加密算法(相对 CM 更安全, 但也不是很安全)
+
+Secret Type:
+
+```go
+  // \kubernetes\pkg\apis\core\types.go
+	// SecretTypeOpaque is the default; arbitrary user-defined data
+	SecretTypeOpaque SecretType = "Opaque"
+
+	// SecretTypeServiceAccountToken contains a token that identifies a service account to the API
+	//
+	// Required fields:
+	// - Secret.Annotations["kubernetes.io/service-account.name"] - the name of the ServiceAccount the token identifies
+	// - Secret.Annotations["kubernetes.io/service-account.uid"] - the UID of the ServiceAccount the token identifies
+	// - Secret.Data["token"] - a token that identifies the service account to the API
+  SecretTypeServiceAccountToken SecretType = "kubernetes.io/service-account-token"
+  // SecretTypeDockercfg contains a dockercfg file that follows the same format rules as ~/.dockercfg
+	//
+	// Required fields:
+	// - Secret.Data[".dockercfg"] - a serialized ~/.dockercfg file
+  SecretTypeDockercfg SecretType = "kubernetes.io/dockercfg"
+	// SecretTypeDockerConfigJSON contains a dockercfg file that follows the same format rules as ~/.docker/config.json
+	//
+	// Required fields:
+	// - Secret.Data[".dockerconfigjson"] - a serialized ~/.docker/config.json file
+  SecretTypeDockerConfigJSON SecretType = "kubernetes.io/dockerconfigjson"
+	// SecretTypeBasicAuth contains data needed for basic authentication.
+	//
+	// Required at least one of fields:
+	// - Secret.Data["username"] - username used for authentication
+	// - Secret.Data["password"] - password or token needed for authentication
+  SecretTypeBasicAuth SecretType = "kubernetes.io/basic-auth"
+	// SecretTypeSSHAuth contains data needed for SSH authentication.
+	//
+	// Required field:
+	// - Secret.Data["ssh-privatekey"] - private SSH key needed for authentication
+	SecretTypeSSHAuth SecretType = "kubernetes.io/ssh-auth"
+	// SecretTypeTLS contains information about a TLS client or server secret. It
+	// is primarily used with TLS termination of the Ingress resource, but may be
+	// used in other types.
+	//
+	// Required fields:
+	// - Secret.Data["tls.key"] - TLS private key.
+	//   Secret.Data["tls.crt"] - TLS certificate.
+	// TODO: Consider supporting different formats, specifying CA/destinationCA.
+  SecretTypeTLS SecretType = "kubernetes.io/tls"
+	// SecretTypeBootstrapToken is used during the automated bootstrap process (first
+	// implemented by kubeadm). It stores tokens that are used to sign well known
+	// ConfigMaps. They are used for authn.
+	SecretTypeBootstrapToken SecretType = "bootstrap.kubernetes.io/token"
+```
+
+[secret](./yamls/pod_management/secret.yaml)
+
+[secret_use](./yamls/pod_management/secret_use.yaml)
+
+Secret 注意事项:
+
+1. Secret 文件不能大于 1MB.
+
+2. 考虑到更安全的方式, 可以使用 kubernetes + vault
+
+3. 获取 Secret 建议使用 GET, list/watch 会全部获取.
+
+
+### ServiceAccount
+
+ServiceAccount 主要用于 **Pod** 在集群中的身份认证.
+认证授权信息的存储使用 Secret.
+
+[serviceaccount](./yamls/pod_management/serviceaccount.yaml)
+
+Pod 访问集群认证过程:
+
+1. Pod 创建时 Admission Controller 会根据指定的 ServiceAccount 将对应的
+   Secret 挂在到容器目录(/var/run/secrets/kubernetes.io/serviceaccount) 中.
+
+2. 当 Pod 访问集群时, 先使用 ca.crt 校验服务端, 然后用 Secret 中的 token 来认证
+   Pod 的身份.
+
+3. Pod 身份被认证后, 通过 RBAC 来配置权限(默认权限为 GET)
+
+### 容器资源配置管理(resources)
+
+[resources](./yamls/pod_management/resources.yaml)
+
+Pod 服务质量 (QoS) 配置: 通过配置不同的服务质量. 当资源不足时会优先驱逐优先级低的 Pod.
+
+- Guaranteed:
+  > Pod 中的每个容器必须有 CPU 和 内存的 requests 和 limits, 且必须一样.
+
+- Burstable:
+  > Pod 里至少有一个容器有内存或 CPu 的 requests
+
+- BestEffor:
+  > 都没有
+
+### Security Context
+
+通过 Security Context 来配置容器的权限/限制行为, 从而保障系统和其他容器的安全.
+
+级别:
+
+1. 容器级别的 Security Context 仅对指定容器生效
+
+2. Pod 级别的 Security Context 对 Pod 内的所有容器生效
+
+3. Pod Security Policies(PSP) 对集群内所有容器生效
+
+权限:
+
+1. Discretionary Access Control: 根据 uid gid 控制文件的访问权限.
+
+2. SELinux: 通过 SELinux 的策略控制用户/进程对文件的访问控制.
+
+3. privileged: 配置容器的特权模式.
+
+4. Linux Capabilities: 给特定进程配置特权模式.
+
+5. AppArmor: 控制可执行文件的访问控制权限(读写文件/目录/网络端口)
+
+5. Seccomp: 控制进程可用的系统调用.
+
+5. AllowPrivilegeEscalation: 控制一个进程是否可以获取比父进程更过的权限.
+
+### InitContainer
+
+通过 InitContainer 来执行业务容器所要的环境初始化操作, 及验证工作.
+
+特点:
+
+1. InitContainer 先于 Container 执行, IC 执行成功后才会启动 Container.
+
+2. Pod 中多个 IC 会按顺序执行, Container 则是并行启动.
+
+3. IC 执行成功后就退出且不再重启.

@@ -1,0 +1,36 @@
+# env 加载 CM 配置
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cm-env-test
+spec:
+  containers:
+  - name: test-container
+    image: busybox
+    command: ["/bin/sh", "-c", "env"]
+    env: # 设置容器环境变量
+    - name: SPECIAL_LEVEL_KEY # 环境变量名称
+      valueFrom:
+        configMapKeyRef:
+          name: special-config # 读取配置的 CM
+          key: special.how     # 读取项的 key
+  restartPolicy: Never
+---
+# 使用 vloume 加载 CM 配置
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cm-volume-test
+spec:
+  containers:
+  - name: test-container
+    image: busybox
+    command: ["/bin/sh", "-c", "ls /etc/config/"]
+    volumeMounts:
+    - name: config-volume # volume 的名称
+      mountPath: /etc/config
+  volumes:
+  - name: config-volume
+    configMap:
+      name: special-config # configmap 的名称
+  restartPolicy: Never
