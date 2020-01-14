@@ -1,0 +1,19 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  schedule: "*/1 * * * * "(every minute) # 执行周期
+  startingDeadlineSeconds: 10 # Job 最长启动时间
+  concurrencyPolicy: Allow # 是否允许并行(上一个任务还没执行完, 下一个已经可以执行)
+  successfulJobsHistoryLimit: 3 # 允许保留历史 job 个数
+  template:
+    spec:
+      containers:
+      - name: hello
+        image: busybox
+        args:
+        - /bin/sh
+        - -c
+        - date; echo Hello from the Kubernetes cluster
+        restartPolicy: OnFailure
