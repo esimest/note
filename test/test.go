@@ -1,22 +1,27 @@
 package main
 
+import "fmt"
+
+type st struct {
+	name string
+	age  int
+}
+
 func main() {
-	var count int = 10
+	s1 := &st{"esimest", 32}
 
-	println("count: \t value of [", count, "]\t Addr of[", &count, "]")
+	func(s *st) {
+		s.name = "Hello"
+	}(s1)
 
-	increment(&count)
+	m := map[string]int{"hello": 3}
 
-	println("count: \t value of [", count, "]\t Addr of[", &count, "]")
+	hw()
+	println(m["hello"])
+	println(s1.name)
+	fmt.Printf("%T", s1)
 }
 
-func increment(inc *int) {
-	*inc++
-	println("inc:\t value of [", *inc, "]\t Addr of[", inc, "]")
+func hw() {
+	println("hello wow...")
 }
-
-/*
-count:   value of [ 10 ]         Addr of[ 0xc00002ff48 ]
-inc:     value of [ 11 ]         Addr of[ 0xc00002ff40 ]
-count:   value of [ 10 ]         Addr of[ 0xc00002ff48 ]
-*/

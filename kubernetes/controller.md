@@ -26,6 +26,7 @@
    > list: Controller 重启和 watch 中断时实现对资源的全量更新.
    > watch: 在多次 list 之间进行资源的增量更新.
 
+
 2. Add Delta
    > Reflector 获取资源数据后, 将包含资源对象及相应事件类型的记录
    > (记作: {key: obj, value: event_type})存入 Delta Queuq.
@@ -480,4 +481,146 @@ type Type struct {
 type empty struct{}
 type t interface{}
 type set map[t]empty
+```
+
+### Reflector
+
+Reflector 通过 list/watch 更新 api resources.
+
+```go
+// reflector 入口方法, 用户实时监听并更新 api resources 状态/数据.
+// Run starts a watch and handles watch events. Will restart the watch if it is closed.
+// Run will exit when stopCh is closed.
+func (r *Reflector) Run(stopCh <-chan struct{}) {
+	klog.V(3).Infof("Starting reflector %v (%s) from %s", r.expectedTypeName, r.resyncPeriod, r.name)
+	wait.Until(func() {
+		if err := r.ListAndWatch(stopCh); err != nil {
+			utilruntime.HandleError(err)
+		}
+	}, r.period, stopCh)
+}
+```
+
+Relector 相关数据结构
+
+```go
+// Reflector watches a specified resource and causes all changes to be reflected in the given store.
+type Reflector struct {
+	// name identifies this reflector. By default it will be a file:line if possible.
+	name string
+
+	// The name of the type we expect to place in the store. The name
+	// will be the stringification of expectedGVK if provided, and the
+	// stringification of expectedType otherwise. It is for display
+	// only, and should not be used for parsing or comparison.
+	expectedTypeName string
+	// The type of object we expect to place in the store.
+	expectedType reflect.Type
+	// The GVK of the object we expect to place in the store if unstructured.
+	expectedGVK *schema.GroupVersionKind
+	// The destination to sync up with the watch source
+	store Store
+	// listerWatcher is used to perform lists and watches.
+	// 核心方法, 用于 list/watch 资源对象得更新
+	listerWatcher ListerWatcher
+	// period controls timing between one watch ending and
+	// the beginning of the next one.
+	period       time.Duration
+	resyncPeriod time.Duration
+	ShouldResync func() bool
+	// clock allows tests to manipulate time
+	clock clock.Clock
+	// lastSyncResourceVersion is the resource version token last
+	// observed when doing a sync with the underlying store
+	// it is thread safe, but not synchronized with the underlying store
+	lastSyncResourceVersion string
+	// isLastSyncResourceVersionGone is true if the previous list or watch request with lastSyncResourceVersion
+	// failed with an HTTP 410 (Gone) status code.
+	isLastSyncResourceVersionGone bool
+	// lastSyncResourceVersionMutex guards read/write access to lastSyncResourceVersion
+	lastSyncResourceVersionMutex sync.RWMutex
+	// WatchListPageSize is the requested chunk size of initial and resync watch lists.
+	// Defaults to pager.PageSize.
+	WatchListPageSize int64
+}
+```
+
+### Informer
+
+Informer 相关数据结构
+
+```go
+type SharedInformer interface {
+	// AddEventHandler adds an event handler to the shared informer using the shared informer's resync
+	// period.  Events to a single handler are delivered sequentially, but there is no coordination
+	// between different handlers.
+	AddEventHandler(handler ResourceEventHandler)
+	// AddEventHandlerWithResyncPeriod adds an event handler to the
+	// shared informer using the specified resync period.  The resync
+	// operation consists of delivering to the handler a create
+	// notification for every object in the informer's local cache; it
+	// does not add any interactions with the authoritative storage.
+	AddEventHandlerWithResyncPeriod(handler ResourceEventHandler, resyncPeriod time.Duration)
+	// GetStore returns the informer's local cache as a Store.
+	GetStore() Store
+	// GetController gives back a synthetic interface that "votes" to start the informer
+	GetController() Controller
+	// Run starts and runs the shared informer, returning after it stops.
+	// The informer will be stopped when stopCh is closed.
+	Run(stopCh <-chan struct{})
+	// HasSynced returns true if the shared informer's store has been
+	// informed by at least one full LIST of the authoritative state
+	// of the informer's object collection.  This is unrelated to "resync".
+	HasSynced() bool
+	// LastSyncResourceVersion is the resource version observed when last synced with the underlying
+	// store. The value returned is not synchronized with access to the underlying store and is not
+	// thread-safe.
+	LastSyncResourceVersion() string
+}
+```
+
+Informer 执行流程
+
+```go
+
+func (s *sharedIndexInformer) Run(stopCh <-chan struct{}) {
+	defer utilruntime.HandleCrash()
+
+	fifo := NewDeltaFIFO(MetaNamespaceKeyFunc, s.indexer)
+
+	cfg := &Config{
+		Queue:            fifo,
+		ListerWatcher:    s.listerWatcher,
+		ObjectType:       s.objectType,
+		FullResyncPeriod: s.resyncCheckPeriod,
+		RetryOnError:     false,
+		ShouldResync:     s.processor.shouldResync,
+
+		Process: s.HandleDeltas,
+	}
+
+	func() {
+		s.startedLock.Lock()
+		defer s.startedLock.Unlock()
+
+		s.controller = New(cfg)
+		s.controller.(*controller).clock = s.clock
+		s.started = true
+	}()
+
+	// Separate stop channel because Processor should be stopped strictly after controller
+	processorStopCh := make(chan struct{})
+	var wg wait.Group
+	defer wg.Wait()              // Wait for Processor to stop
+	defer close(processorStopCh) // Tell Processor to stop
+	wg.StartWithChannel(processorStopCh, s.cacheMutationDetector.Run)
+	wg.StartWithChannel(processorStopCh, s.processor.run)
+
+	defer func() {
+		s.startedLock.Lock()
+		defer s.startedLock.Unlock()
+		s.stopped = true // Don't want any new listeners
+	}()
+	s.controller.Run(stopCh)
+}
 ```
