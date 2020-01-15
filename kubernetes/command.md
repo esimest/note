@@ -52,7 +52,11 @@ kubectl label nodes ${node_name} ${key}=${value}
 kubectl label nodes ${node_name} ${key}=${value} --over-write
 
 # 实时检测资源的变化
-kubect get --watch ${object}
+kubectl get --watch ${object}
+kubectl get ${object} -w
+
+# 过滤输出内容
+kubectl get ${object} -o template --template={{.metadata.slefLink}}
 ```
 
 ## 常用别名

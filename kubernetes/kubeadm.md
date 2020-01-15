@@ -22,8 +22,8 @@
 ```shell
 kubeadm init --image-repository=registry.aliyuncs.com/google_containers \
 --control-plane-endpoint=172.16.14.146:6443 \
---pod-network-cidr=172.18.0.0/16 \
---service-cidr=10.0.0.0/16 --upload-certs
+--pod-network-cidr=10.244.0.0/16 \
+--service-cidr=192.168.200.1/24 --upload-certs=true
 ```
 
 ## 集群高可用

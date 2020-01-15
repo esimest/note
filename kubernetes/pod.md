@@ -118,52 +118,22 @@ Secret 用于存储密码, token 等敏感资源信息.
 
 Secret Type:
 
-```go
-  // \kubernetes\pkg\apis\core\types.go
-	// SecretTypeOpaque is the default; arbitrary user-defined data
-	SecretTypeOpaque SecretType = "Opaque"
+[Secrent 类型](https://github.com/kubernetes/pkg/apis/core/types.go)
 
-	// SecretTypeServiceAccountToken contains a token that identifies a service account to the API
-	//
-	// Required fields:
-	// - Secret.Annotations["kubernetes.io/service-account.name"] - the name of the ServiceAccount the token identifies
-	// - Secret.Annotations["kubernetes.io/service-account.uid"] - the UID of the ServiceAccount the token identifies
-	// - Secret.Data["token"] - a token that identifies the service account to the API
-  SecretTypeServiceAccountToken SecretType = "kubernetes.io/service-account-token"
-  // SecretTypeDockercfg contains a dockercfg file that follows the same format rules as ~/.dockercfg
-	//
-	// Required fields:
-	// - Secret.Data[".dockercfg"] - a serialized ~/.dockercfg file
-  SecretTypeDockercfg SecretType = "kubernetes.io/dockercfg"
-	// SecretTypeDockerConfigJSON contains a dockercfg file that follows the same format rules as ~/.docker/config.json
-	//
-	// Required fields:
-	// - Secret.Data[".dockerconfigjson"] - a serialized ~/.docker/config.json file
-  SecretTypeDockerConfigJSON SecretType = "kubernetes.io/dockerconfigjson"
-	// SecretTypeBasicAuth contains data needed for basic authentication.
-	//
-	// Required at least one of fields:
-	// - Secret.Data["username"] - username used for authentication
-	// - Secret.Data["password"] - password or token needed for authentication
-  SecretTypeBasicAuth SecretType = "kubernetes.io/basic-auth"
-	// SecretTypeSSHAuth contains data needed for SSH authentication.
-	//
-	// Required field:
-	// - Secret.Data["ssh-privatekey"] - private SSH key needed for authentication
-	SecretTypeSSHAuth SecretType = "kubernetes.io/ssh-auth"
-	// SecretTypeTLS contains information about a TLS client or server secret. It
-	// is primarily used with TLS termination of the Ingress resource, but may be
-	// used in other types.
-	//
-	// Required fields:
-	// - Secret.Data["tls.key"] - TLS private key.
-	//   Secret.Data["tls.crt"] - TLS certificate.
-	// TODO: Consider supporting different formats, specifying CA/destinationCA.
-  SecretTypeTLS SecretType = "kubernetes.io/tls"
-	// SecretTypeBootstrapToken is used during the automated bootstrap process (first
-	// implemented by kubeadm). It stores tokens that are used to sign well known
-	// ConfigMaps. They are used for authn.
-	SecretTypeBootstrapToken SecretType = "bootstrap.kubernetes.io/token"
+
+```yaml
+# kubernetes.io/service-account-token 类型 Secret
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: xxx
+  namespace: xxx
+data:
+  ca.crt:
+  namespace:
+  token:
+type: kubernetes.io/service-account-token
 ```
 
 [secret](./yamls/pod_management/secret.yaml)
@@ -186,15 +156,23 @@ ServiceAccount 主要用于 **Pod** 在集群中的身份认证.
 
 [serviceaccount](./yamls/pod_management/serviceaccount.yaml)
 
+ServiceAccount 的自动化主要由三个组件来实现.
+
+- ServiceAccount Admission Controller
+
+- Token Controller
+
+- ServiceAccount Controller
+
+[ServiceAccount 官方文档](https://kubernetes.io/zh/docs/reference/access-authn-authz/service-accounts-admin/)
+
 Pod 访问集群认证过程:
 
-1. Pod 创建时 Admission Controller 会根据指定的 ServiceAccount 将对应的
-   Secret 挂在到容器目录(/var/run/secrets/kubernetes.io/serviceaccount) 中.
+1. Pod 访问集群时, 先使用 Secret 中的 ca.crt 对服务端进行校验.
 
-2. 当 Pod 访问集群时, 先使用 ca.crt 校验服务端, 然后用 Secret 中的 token 来认证
-   Pod 的身份.
+2. 检验成功后, 使用 Secret 中的 token 验证 Pod 的身份.
 
-3. Pod 身份被认证后, 通过 RBAC 来配置权限(默认权限为 GET)
+3. 验证成功后, 通过 Service 对用的 Role 分配 Pod 相应的权限(此项有待完善).
 
 ### 容器资源配置管理(resources)
 
