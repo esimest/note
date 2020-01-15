@@ -4,9 +4,10 @@
 # 安装 tiller 依赖
 yum install -y socat
 
-# 获取 helm
-wget https://get.helm.sh/helm-v2.16.1-linux-amd64.tar.gz
+# 获取 helm(3 版本不需要 tiller)
+wget https://get.helm.sh/helm-v3.0.1-linux-amd64.tar.gz
 
-# 安装 tiller(helm 服务端)
-helm init --upgrade -i registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.16.1  --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+# 添加仓库源
+helm repo add ${repo_name} https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+
 ```
