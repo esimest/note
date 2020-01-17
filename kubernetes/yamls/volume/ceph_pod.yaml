@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ceph-test
+  labels:
+    name: ceph-test
+spec:
+  containers:
+  - name: ceph-test
+    image: busybox
+    resources:
+    volumeMounts:
+    - name: data
+      mountPath: /data
+    command: ["df"]
+  volumes:
+  - name: data
+    persistentVolumeClaim:
+        claimName: test-pvc

@@ -2,7 +2,7 @@
 
 ## 本地存储
 
-![pod_volume](./yamls/volume/pod_volume.yaml)
+[pod_volume](./yamls/volume/pod_volume.yaml)
 
 ### 使用场景(Pod 与 Volume 生命周期相同)
 
@@ -50,12 +50,14 @@ PersistentVolumeController 将 ${pv-name} 与 ${pvc-name} 绑定.
 
 管理员预分配 PV, 用户通过 PVC 使用具体的 PV.
 
-![static volume provision](./images/static_volume_provision.png)
+![static volume provision](./images/static_pv.png)
 
 ### Dynamic Volume Provisioning
 
 管理员创建 StorageClass 模板文件, 用于通过 PVC 输入具体的数值.
 由模板动态生成相应的 PV.
+
+![dynamic volume provision](./images/dynamic_pv.png)
 
 ### PV 状态流转
 
@@ -63,6 +65,6 @@ PersistentVolumeController 将 ${pv-name} 与 ${pvc-name} 绑定.
 
 ### PV+PVC 处理流程
 
-![CNI01](./images/cni_01.png)
+![CSI01](./images/csi_01.png)
 
-![CNI02](./images/cni_02.png)
+![CSI02](./images/csi_02.png)

@@ -1,0 +1,13 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: test-storageclass
+provisioner: kubernetes.io/rdb
+parameters:
+  monitors: "{{ ip:port,ip:port,ip:port }}"
+  adminId: admin
+  adminSecretName: secret-ceph
+  adminSecretNamespace: ceph
+  pool: k8s
+  userId: admin
+  userSecretName: ceph-secret
