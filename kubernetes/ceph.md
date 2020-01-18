@@ -23,3 +23,11 @@ kubernetes 创建 pvc 后自动创建 pv 并 bound.
 ## Dynamic Volume Provision
 
 1. [创建 StorageClass](./yamls/volem/storage_class.yaml)
+
+## ceph-deploy
+
+```shell
+# 配置代理
+export CEPH_DEPLOY_REPO_URL=http://mirrors.aliyun.com/ceph/rpm-jewel/el7
+export CEPH_DEPLOY_GPG_URL=http://mirrors.aliyun.com/ceph/keys/release.asc
+```
