@@ -72,3 +72,13 @@ GOPATH 项目路径，可以有多个值。windows 下以分号分隔，linux �
 go get 安装目录默认为 GOPATH 中的第一个路径
 GOPROXY=https://goproxy.cn 代理源(需设置 GO111MODULE=on )
 ```
+
+## NTP 服务器
+
+```shell
+server time1.cloud.tencent.com
+server time2.cloud.tencent.com
+server time3.cloud.tencent.com
+server time4.cloud.tencent.com
+server time5.cloud.tencent.com
+```
