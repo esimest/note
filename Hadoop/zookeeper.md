@@ -46,7 +46,7 @@ Zookeeper 事务:
   > 有限时间内返回正确结果
 
 - 分区容错性(必须要保证)
-  > 系统在遇到任何网络分区故障时，任然需要对外部保证一致性和可用性，除非是整个网络故障
+  > 系统在遇到任何网络分区故障时，仍然需要对外部保证一致性和可用性，除非是整个网络故障
 
 ### BASE(Basic Avaiability、Soft state、Eventually consistency)
 
@@ -82,7 +82,7 @@ Zookeeper 事务:
 
 ### ZAB 核心
 
-> 所有事物请求必须由一个全局唯一的服务器(Leader)来协调处理。Leader 服务器负责将一个客户的端的事物请求转换成一个事务 Proposal, 并将该 Proposal 分发给集群中的所有 Follower。之后 Leader 许需要等待所有 Follower 的反馈，一旦超过半数的 Follower 进行了正确的反馈后，Leader 就会向所有 Follower 发送 Commit 消息，要求将前一个 Proposal 进行提交。
+> 所有事务请求必须由一个全局唯一的服务器(Leader)来协调处理。Leader 服务器负责将一个客户的端的事务请求转换成一个事务 Proposal, 并将该 Proposal 分发给集群中的所有 Follower。之后 Leader 需要等待所有 Follower 的反馈，一旦超过半数的 Follower 进行了正确的反馈后，Leader 就会向所有 Follower 发送 Commit 消息，要求将前一个 Proposal 进行提交。
 
 ### 崩溃恢复
 

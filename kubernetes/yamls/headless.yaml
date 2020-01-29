@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  Service Name
+spec:
+  selector:
+    app:  Selector Label
+  clusterIP: None # 通过设置 ClusterIP 为 None 来声明 Headless Service
+  ports:
+  - name:  name-of-the-port
+    port:  80
+    targetPort:  8080
