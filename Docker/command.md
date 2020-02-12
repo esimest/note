@@ -17,6 +17,9 @@ docker run -d
 
 # 设置容器的 hostname
 docker run --hostname=${hostname}
+
+# 特权模式运行容器, 容器可以以 root 权限访问宿主机.
+docker run --periviledged
 ```
 
 #### NameSpace
@@ -57,6 +60,9 @@ docker run --userns=host
 ```shell
 # 查看容器 IP 地址
 docker inspect -f='{{.NetworkSettings.IPAddress}}' ${name|id}
+
+# 查看容器的所有镜像层目录
+docker inspect ${container} -f={{.GraphDriver.Data.LowerDir}}| awk 'BEGIN{RS=":"}{print}'
 ```
 
 ## Alias

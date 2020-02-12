@@ -99,6 +99,11 @@ Probe 相关参数:
 
 ## Debug
 
+### kube-shell
+
+kube-shell 提供 kubectl 命令补全
+安装: `pip install kube-shell`
+
 ### Pod 调式
 
 ```shell

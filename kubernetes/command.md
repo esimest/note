@@ -51,6 +51,9 @@ kubectl label nodes ${node_name} ${key}=${value}
 # 覆盖 node 上的标签
 kubectl label nodes ${node_name} ${key}=${value} --over-write
 
+# 删除 node 上的标签
+kubectl label no ${node_name} ${key}-
+
 # 实时检测资源的变化
 kubectl get --watch ${object}
 kubectl get ${object} -w
