@@ -30,7 +30,7 @@ func main() {
 	}
 }
 
-// NewAPIServerCommand: \\kubernetes\cmd\kube-apiserver\app\server.go
+// NewAPIServerCommand \\kubernetes\cmd\kube-apiserver\app\server.go
 func NewAPIServerCommand() *cobra.Command {
 	s := options.NewServerRunOptions()
 	cmd := &cobra.Command{
@@ -255,6 +255,7 @@ type Config struct {
 }
 
 // TransportConfig holds all connection related info,  i.e. equal TransportConfig means equal servers we talk to.
+// TransportConfig 存储着连接相关的信息. 相同的 TransportConfig 意味着相同的后端 EtcdServer.
 type TransportConfig struct {
 	// ServerList is the list of storage servers to connect with.
 	ServerList []string

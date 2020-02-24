@@ -30,12 +30,37 @@ kubernetes 创建 pvc 后自动创建 pv 并 bound.
 
 1. [创建 StorageClass](./yamls/volume/storage_class.yaml)
 
+## ceph-command
+
+```shell
+# 查看集群健康状态
+ceph status
+ceph -s
+
+# df
+osd df
+ceph df
+rados df
+```
+
+## ceph-alias
+
+```shell
+alias osd='ceph osd'
+alias mon='ceph mon'
+```
+
 ## ceph-deploy
 
 ```shell
 # 配置代理
 export CEPH_DEPLOY_REPO_URL=http://mirrors.aliyun.com/ceph/rpm-jewel/el7
 export CEPH_DEPLOY_GPG_URL=http://mirrors.aliyun.com/ceph/keys/release.asc
+
+# ceph-deploy mon create-initial 之前需要 yum redhat-lsb
+
+# 删除旧的 osd 卷
+ceph-volume lvm zap /dev/sdb --destroy
 ```
 
 ## Problems
@@ -52,4 +77,27 @@ cephs osd dump | grep full
 ceph osd set-full-ratio [0-1]
 ceph osd set-nearfull-ratio [0-1]
 ceph osd set-backfillfull-ratio [0-1]
+```
+
+### service
+
+```shell
+# ceph-deploy 版本过低导致以下报错. 更新 ceph-deploy 即可
+Running command: /usr/sbin/service ceph -c /etc/ceph/ceph.conf start mon.node-151
+The service command supports only basic LSB actions (start, stop, restart, try-restart, reload, force-reload, status). For other actions, please try to use systemctl.
+```
+
+### rbd map
+
+```shell
+# rbd map rbd/bar
+rbd: sysfs write failed
+RBD image feature set mismatch. You can disable features unsupported by the kernel with "rbd feature disable bar object-map fast-diff deep-flatten".
+In some cases useful info is found in syslog - try "dmesg | tail".
+
+# 原因是内核不支持一些 ceph 的新特性. 关掉即可
+# 针对每个 img 执行 disable 操作(需要对每个 img 都执行)
+rbd feature disable ${img_name} exclusive-lock, object-map, fast-diff, deep-flatten
+# 修改 ceph.conf 重启 ceph 后永久生效
+rbd_default_features = 1
 ```

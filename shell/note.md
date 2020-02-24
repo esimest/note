@@ -1,5 +1,67 @@
 # Shell Note
 
+## 特殊符号
+
+### `[]`
+
+`[]` 是 `test` 命令的另一种形式(可直接当作命令使用). `[` 与参数之间需要有空格 `]`.
+该命令的返回值只有 `0`(true) 和 `1`(false).
+查看帮助: `man test`/`man [`
+
+```shell
+# 字符串是否为空
+[ -z ${var} ] # return len(${var}) == 0
+[ -n ${var} ] # return lent(${var}) != 0
+
+# 字符串判等 ==/= !=
+[ ${a} == ${b} ] # retrun str(${a}) == str(${b})
+
+# 数字(整数)判等 -eq -lt -gt
+[ ${a} -eq ${b} ] # return int(${a}) == int(${b})
+
+# and(-a) or(-o) not(!)
+[ ! $(expr)] # return not $(expr)
+[ $(expr1) -a $(expr2) ] # return $(expr1) and $(expr2)
+```
+
+## Compound Commands(复合命令)
+
+查看帮助: `man bash`
+
+### `(list)`
+
+在 subshell 中执行命令集合, 通过 `$` 获取命令的结果.
+
+### `{list;}`
+
+在当前 shell 中执行命令集合
+
+### `[[]]`
+
+条件表达式.
+`[[]]` 可以使用 `[]` 中大部分选项.
+
+```shell
+# and or not
+[[ expr1 && expr2 ]] # return expr1 and expr2
+[[ ! 3 < 2 ]]  # true
+
+# 正则匹配
+[[ str =~ regex ]] # return re.match(regex, str)
+```
+
+### `(())`
+
+1. 算术表达式, 通过 `$` 符号获取表达式的值;
+2. 用于 for 循环, 语法与 `C` 语言类似;
+
+```shell
+for (( i = 0; i < 3; i++ )); do
+  echo "$i"
+done
+
+```
+
 ## Linux 字符串
 
 ### 单引号、双引号
