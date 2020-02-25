@@ -75,3 +75,10 @@ rm -- -foo 或 rm ./-foo
 
 # rm 和 cp  的 -r -R --recursive 作用一样
 ```
+
+## history
+
+```shell
+# history 显示时间
+echo "export HISTTIMEFORMAT='%F %T '" >> ~/.bash_profile; source ~/.bash_profile;
+```
