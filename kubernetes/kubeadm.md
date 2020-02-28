@@ -146,6 +146,11 @@ kubeadm init --log-file=kubeadm.log \
 
 ## Problems
 
+### static pod
+
+kubelet 加载 /etc/kubernetes/manifests/ 目录下文件的方式类似与 kubectl apply -f.
+**因此当目录中存在多个文件声明同一个资源时会出现后面的文件的配置覆盖前面文件的配置的情况.**
+
 ### nginx 监听 vip 失败
 
 nginx: [emerg] bind() to ${vip}:6443 failed (99: Cannot assign requested address);

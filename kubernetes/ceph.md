@@ -89,6 +89,9 @@ The service command supports only basic LSB actions (start, stop, restart, try-r
 
 ### rbd map
 
+**注意: map操作使用的是krbd k8s使用的是rdb, krbd是内核rbd 走的是内核  rbd是走的librbd**
+因此, k8s 动态 pv 不需要关闭 ceph 新特性.
+
 ```shell
 # rbd map rbd/bar
 rbd: sysfs write failed
