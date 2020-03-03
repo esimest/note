@@ -60,6 +60,13 @@ kubectl get ${object} -w
 
 # 过滤输出内容
 kubectl get ${object} -o template --template={{.metadata.slefLink}}
+
+# 访问 api-server 指定 url 路径
+kubectl get --raw=${URL}
+## 例
+kubectl get --raw=/metrics
+kubectl get --raw=/openapi/v2
+kubectl get --raw=/
 ```
 
 ## 常用别名

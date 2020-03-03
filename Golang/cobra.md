@@ -19,6 +19,11 @@ kubectl get pod --watch
 
 ```
 
+### Flag
+
+Flag 常用于扩展命令的功能。当给命令/子命令添加 Flag(选项) 后可以在命令的
+逻辑中进行 Flag 的判断实现不同场景功能的切换。
+
 ## 项目组成
 
 ### Cobra init
@@ -45,19 +50,19 @@ func main() {
 }
 ```
 
-`cmd/roog.go` 中定义了根命令`rootCmd`.以及初始化函数`init`,
+`cmd/root.go` 中定义了根命令`rootCmd`.以及初始化函数`init`,
 项目中并没有显示的调用 `cmd.init` 函数, 但是通过调试发现 init 执行在
 `main.main` 之前. 用于初始化命令的 Flag.
 
 ```go
 // 通过在每个函数中添加一条打印语句来确定函数的执行顺序
-//main.go
+// main.go
 func main() {
 	fmt.Println("func main.main")
 	cmd.Execute()
 }
 
-//  cmd/root.g
+// cmd/root.g
 func Execute() {
 	fmt.Println("func cmd.Execute")
 	...

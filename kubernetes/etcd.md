@@ -26,6 +26,18 @@ A distributed, reliable key-value store for the most critical data of a distribu
 
 ![etcd 架构](./images/etcd_mechanism.png)
 
+## Config
+
+### etcdctl 配置
+
+```shell
+# 设置以下环境变量，省去每次调用 etcdctl 时都重复输入
+export ETCDCTL_ENDPOINTS=https://127.0.0.1:2379
+export ETCDCTL_CACERT=/etc/kubernetes/pki/etcd/ca.crt
+export ETCDCTL_CERT=/etc/kubernetes/pki/etcd/healthcheck-client.crt
+export ETCDCTL_KEY=/etc/kubernetes/pki/etcd/healthcheck-client.key
+```
+
 ## Commands
 
 ```shell
