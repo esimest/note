@@ -83,16 +83,14 @@ ansible_python_interpreter | /usr/bin/python | Python interpreter on host (see t
 'hostvars' # 可以获取所有主机的主机变量(常用于获取其它主机的变量)
 ```
 
-## Copy 模块
+### 获取主机的 ip 地址
 
 ```shell
-# 拷贝时保留源文件/目录的 mode
-mode=preserve
+# 1. 通过 hostvars 获取
+{{ ansible_host }}
 
-# 以字符串作为源文件，写入目标文件
-content='${str}'  # content 和 src 同时只能出现一个
-
-#
+#2. 通过 facts 获取
+{{ ansible_default_ipv4.address }}
 ```
 
 ## Handler

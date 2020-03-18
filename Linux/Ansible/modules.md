@@ -49,3 +49,15 @@ lineinfile:
   group: root
   line: ''
 ```
+
+## copy
+
+```shell
+# 拷贝时保留源文件/目录的 mode
+mode=preserve
+
+# 以字符串作为源文件，写入目标文件
+content='${str}'  # content 和 src 同时只能出现一个
+
+#
+```
