@@ -18,6 +18,19 @@
 
 [](https://ggaaooppeenngg.github.io/zh-CN/2017/09/21/flannel-%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/)
 
+flannel 做两件事:
+
+1. 分配子网(通过 subnet manager)
+
+2. 使用相应的 backend 进行报文封装
+
+3. 将封装的报文在 flanneld 之间传输
+
+### vxlan backend 数据包流向
+
+- vxlan:
+  [](https://support.huawei.com/enterprise/zh/doc/EDOC1100023543?section=j016)
+
 ### Flannel 运行参数
 
 - `--public-ip=""`
