@@ -20,30 +20,24 @@ spec:
     - pathPrefix: "/etc/kube-flannel"
     - pathPrefix: "/run/flannel"
   readOnlyRootFilesystem: false
-  # Users and groups
   runAsUser:
     rule: RunAsAny
   supplementalGroups:
     rule: RunAsAny
   fsGroup:
     rule: RunAsAny
-  # Privilege Escalation
   allowPrivilegeEscalation: false
   defaultAllowPrivilegeEscalation: false
-  # Capabilities
   allowedCapabilities: ['NET_ADMIN']
   defaultAddCapabilities: []
   requiredDropCapabilities: []
-  # Host namespaces
   hostPID: false
   hostIPC: false
   hostNetwork: true
   hostPorts:
   - min: 0
     max: 65535
-  # SELinux
   seLinux:
-    # SELinux is unused in CaaSP
     rule: 'RunAsAny'
 ---
 kind: ClusterRole

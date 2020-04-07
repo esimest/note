@@ -1,3 +1,4 @@
 {
-    "registry-mirrors": ["https://sx6i79oq.mirror.aliyuncs.com"]
+    "registry-mirrors": ["https://sx6i79oq.mirror.aliyuncs.com"],
+    "graph": "/data/docker"
 }

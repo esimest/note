@@ -6,7 +6,7 @@
 
 - 所有 Node 可以与 Pod 直接通信, 无需显式的 NAT.
 
-- Pod 可见的 IP 地址确为其它 Pod 与其通信时使用, 无需显式的抓换.
+- Pod 可见的 IP 地址确为其它 Pod 与其通信时使用, 无需显式的转换.
 
 学习网络插件需要关注的点:
 
@@ -16,15 +16,17 @@
 
 [](https://www.cnblogs.com/rexcheny/p/10960233.html)
 
-[](https://ggaaooppeenngg.github.io/zh-CN/2017/09/21/flannel-%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/)
 
-flannel 做两件事:
+flannel 职责:
 
 1. 分配子网(通过 subnet manager)
 
 2. 使用相应的 backend 进行报文封装
 
 3. 将封装的报文在 flanneld 之间传输
+
+**[flannel 流程及流量转发流程分析](http://www.sel.zju.edu.cn/?p=690)**
+[](https://ggaaooppeenngg.github.io/zh-CN/2017/09/21/flannel-%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/)
 
 ### vxlan backend 数据包流向
 

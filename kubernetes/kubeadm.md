@@ -9,6 +9,7 @@
 3. 内核参数配置
    > `modprobe: FATAL: Module br_netfilter not found.` 问题.
    > 安装 br_netfilter 模块 `yum install -y bridge-utils.x86_64` 后重启.
+   > 或者是操作系统版本过低(需要 centos7.5+)
 
 4. 清空 iptables 规则, 关闭 firewalld, selinux
 
