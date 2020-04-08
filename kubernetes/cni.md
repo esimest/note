@@ -17,16 +17,31 @@
 [](https://www.cnblogs.com/rexcheny/p/10960233.html)
 
 
-flannel 职责:
-
-1. 分配子网(通过 subnet manager)
-
-2. 使用相应的 backend 进行报文封装
-
-3. 将封装的报文在 flanneld 之间传输
+## flannel 工作流程
 
 **[flannel 流程及流量转发流程分析](http://www.sel.zju.edu.cn/?p=690)**
 [](https://ggaaooppeenngg.github.io/zh-CN/2017/09/21/flannel-%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84/)
+
+1. 节点初始化
+
+问题点:
+
+1. 如何选择宿主机之间的通信方式，ip、网卡等;
+
+2. 初始化过程会对宿主机做什么改变。添加network interface、route、fdb、bridge 等;
+
+3. 网段信息的分配、同步和租约;
+
+4. 各类对象对应的接口/类型，及提供的方法;
+
+5. 相关的几个配置文件;
+
+```shell
+# 1. 分配子网(通过 subnet manager)
+
+# 2. 使用相应的 backend 进行报文封装
+
+# 3. 将封装的报文在 flanneld 之间传输```
 
 ### vxlan backend 数据包流向
 
