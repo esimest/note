@@ -1,5 +1,8 @@
 # ip 命令
 
+[文档](http://www.policyrouting.com/iproute2.doc.html)
+[ip a 输出解读](https://linux.cn/article-9476-1.html)
+
 ## 单网卡多 IP 配置(eth0为例)
 
 ### 配置文件配置
@@ -12,3 +15,6 @@
 ### ip 命令设置
 
 `ip a add ${ip/mask} dev eth0`
+
+## ip route/r/ro
+

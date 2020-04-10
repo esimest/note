@@ -36,6 +36,27 @@
 
 5. 相关的几个配置文件;
 
+初始化做了以下工作:
+
+1. 读取/设置参数值
+
+2. 获取宿主机网卡信息保存至 `*backend.ExternalInterface` 结构体中
+
+3. 创建子网管理器 `kubeSubnetManager`
+
+子网管理器的作用:
+
+相关的注解:
+
+```yaml
+#kubectl get no node01 -oyaml | yq r -P - 'metadata.annotations'
+flannel.alpha.coreos.com/backend-data: '{"VtepMAC":"a6:f4:cb:d7:bc:14"}' # backend 的附加信息
+flannel.alpha.coreos.com/backend-type: vxlan # 使用 vxlan 作为 backend
+flannel.alpha.coreos.com/kube-subnet-manager: "true" # 此注解表明使用 apiserver 管理租约信息
+flannel.alpha.coreos.com/public-ip: 172.16.14.147
+...
+```
+
 ```shell
 # 1. 分配子网(通过 subnet manager)
 
