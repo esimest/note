@@ -128,7 +128,7 @@ data:
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: kube-flannel-ds-amd64
+  name: flannel
   namespace: kube-system
   labels:
     tier: node
@@ -176,7 +176,7 @@ spec:
         - name: flannel-cfg
           mountPath: /etc/kube-flannel/
       containers:
-      - name: kube-flannel
+      - name: flannel
         image: quay.io/coreos/flannel:v0.11.0-amd64
         command:
         - /opt/bin/flanneld
