@@ -9,7 +9,7 @@
 3. 内核模块加载
    > `modprobe: FATAL: Module br_netfilter not found.` 问题.
    > 安装 br_netfilter 模块 `yum install -y bridge-utils.x86_64` 后重启.
-   > 或者是操作系统版本过低(需要 centos7.5+).
+   > 或者是内核版本过低(需要 3.10.0-862.4.1.el7.x86_64 以上).
    > 该模块用于提供 kubernetes pod 间通信的 ip 伪装功能.
 
 4. 清空 iptables 规则, 关闭 firewalld, selinux
