@@ -39,12 +39,6 @@ kubectl get pod | grep ${name} | xargs -n1 -i kubectl exec {} -- ${command}
 # 命令行创建 svc
 kubectl expose deploy ${deploy_name} --port=${dest_port} --target-port=${expose_port}
 
-# 删除 pod
-kubectl delete po ${pod_name}
-
-# 删除 ReplicaSet
-kubectl delete rs ${rs_name}
-
 # node 打标签
 kubectl label nodes ${node_name} ${key}=${value}
 
@@ -72,59 +66,70 @@ kubectl get --raw=/
 ## 常用别名
 
 ```shell
-alias kd='kubectl delete  pod --all-namespaces'
-alias kds='kubectl delete svc --all-namespaces'
-alias kg='kubectl get pod --all-namespaces -o wide |grep '
-alias kgs='kubectl get svc --all-namespaces -o wide |grep '
+alias kbad='kubectl get po -A -owide | awk "\$4 !~ /(Running)|(Completed)/"'
+alias kd='kubectl delete'
+alias ke='kubectl edit'
+alias kg='kubectl get'
+alias kgy='kubectl get -oyaml'
+alias kga='kubectl get -A'
+alias klogs='kubectl logs'
+alias ks='kubectl describe'
 
-function ke(){
-  kubectl exec -it $1 --all-namespaces bash;
+function kgrep() {
+  while getopts "n:" arg; do
+    case ${arg} in
+      n) namespace=${OPTARG}      ;;
+    esac
+  done
+  shift $(( $OPTIND - 1 ))
+
+  if [[ $# == 1 ]]; then
+    kubectl get po -A -owide | grep $1
+  elif [[ $# == 2 ]]; then
+    if [[ ${namespace} == "" ]]; then
+      kubectl get -A $1 -owide | grep $2
+    else
+      kubectl get -n${namespace} $1 -owide | grep $2
+    fi
+  else
+    exit 1
+  fi
 }
-alias ke=ke
-alias ka="kubectl get pod --all-namespaces -o wide"
-alias kas="kubectl get svc --all-namespaces -o wide"
-alias kc="kubectl --all-namespaces describe pod"
-alias kl="kubectl logs"
-```
 
-## Kubernetes 一些对象的简写(可直接在命令行中使用)
+function kin() {
+  while getopts "n:c:" arg; do
+    case ${arg} in
+      n) namespace=${OPTARG}      ;;
+      c) container=${OPTARG}      ;;
+    esac
+  done
+  shift $(( $OPTIND - 1 ))
 
-```shell
-* all
-* certificatesigningrequests (aka 'csr')
-* clusterrolebindings
-* clusterroles
-* componentstatuses (aka 'cs')
-* configmaps (aka 'cm')
-* controllerrevisions
-* cronjobs
-* customresourcedefinition (aka 'crd')
-* daemonsets (aka 'ds')
-* deployments (aka 'deploy')
-* endpoints (aka 'ep')
-* events (aka 'ev')
-* horizontalpodautoscalers (aka 'hpa')
-* ingresses (aka 'ing')
-* jobs
-* limitranges (aka 'limits')
-* namespaces (aka 'ns')
-* networkpolicies (aka 'netpol')
-* nodes (aka 'no')
-* persistentvolumeclaims (aka 'pvc')
-* persistentvolumes (aka 'pv')
-* poddisruptionbudgets (aka 'pdb')
-* podpreset
-* pods (aka 'po')
-* podsecuritypolicies (aka 'psp')
-* podtemplates
-* replicasets (aka 'rs')
-* replicationcontrollers (aka 'rc')
-* resourcequotas (aka 'quota')
-* rolebindings
-* roles
-* secrets
-* serviceaccounts (aka 'sa')
-* services (aka 'svc')
-* statefulsets (aka 'sts')
-* storageclasses (aka 'sc')
+  namespace=${namespace:=default}
+
+  if [[ ! ${container} == "" ]]; then
+    kubectl exec -it -n${namespace} $1 -c ${container} sh
+  else
+    kubectl exec -it -n${namespace} $1 sh
+  fi
+}
+
+function kdo() {
+  while getopts "n:c:" arg; do
+    case ${arg} in
+      n) namespace=${OPTARG}      ;;
+      c) container=${OPTARG}      ;;
+    esac
+  done
+  shift $(( $OPTIND - 1 ))
+
+  name=$1
+  shift 1
+  if [[ ! ${container} == "" ]]; then
+    kubectl exec -n${namespace} ${name} -c${container} -- $*
+  else
+    kubectl exec -n${namespace} ${name} -- $*
+  fi
+}
+
 ```
